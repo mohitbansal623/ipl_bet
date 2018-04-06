@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Data Table feature.
+ */
+
+include_once 'data_table.features.inc';

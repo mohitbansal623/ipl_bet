@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the IPL Matches feature.
+ */
+
+include_once 'ipl_matches.features.inc';

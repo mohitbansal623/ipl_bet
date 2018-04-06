@@ -1,0 +1,656 @@
+<?php
+
+/**
+ * Implements hook_menu()
+ */
+
+function betting_module_menu() {
+  $items['betting-form'] = array(
+    'title' => 'Betting Form',
+    'page callback' => 'bet_form',
+    'type' => MENU_CALLBACK,
+    'access callback' => 'check_access',
+  );
+
+  return $items;
+}
+
+function check_access() {
+  if (user_is_logged_in()) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+function bet_form() {
+  $renderable_form = drupal_get_form('betting_form');
+
+  return $renderable_form;
+}
+
+
+function betting_form($form, &$form_state) {
+  $form['nid'] = array(
+   '#type' => 'hidden',
+   '#value' => $_SESSION['nid'], // Nid of the Match will come
+  );
+
+  $node = node_load($_SESSION['nid']);
+  if (!empty($node)) {
+    $teamA = isset($node->field_team_a['und'][0]['value'])? $node->field_team_a['und'][0]['value']: NULL;
+    $teamB = isset($node->field_team_b['und'][0]['value'])? $node->field_team_b['und'][0]['value']: NULL;
+    $teamC = 'Tie';
+  }
+
+  else {
+    drupal_set_message(t("Access denied"), 'warning');
+
+    return $form;
+  }
+
+  // Match Winner Bet
+  $form['match_winner'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Match Winner',
+  );
+
+  $form['match_winner']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 1, // Form ID
+  );
+
+  $active = array('A' => $teamA, 'B' => $teamB);
+
+  $form['match_winner']['options'] = array(
+    '#type' => 'radios',
+    '#options' => $active,
+  );
+
+  $form['match_winner']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click to Join'),
+    '#submit' => array('save_match_winner'),
+    '#name' => 1,
+  );
+
+
+  // Match Toss Bet
+  $form['match_toss'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Match Toss',
+  );
+
+  $form['match_toss']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 2, // Form ID
+  );
+
+  $active = array('A' => $teamA, 'B' => $teamB);
+
+  $form['match_toss']['options'] = array(
+    '#type' => 'radios',
+    '#options' => $active,
+  );
+
+  $form['match_toss']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click to Join'),
+    '#submit' => array('save_match_toss'),
+    '#name' => 2,
+  );
+
+
+  // Highest Powerplay Runs
+
+  $form['match_powerplay_runs'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Highest Powerplay Runs',
+  );
+
+  $form['match_powerplay_runs']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 3, // Form ID
+  );
+
+  $tie = $teamC;
+  $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+
+  $form['match_powerplay_runs']['options'] = array(
+    '#type' => 'radios',
+    '#options' => $active,
+    '#required' => FALSE,
+  );
+
+  $form['match_powerplay_runs']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click to Join'),
+    '#submit' => array('save_match_powerplay_runs'),
+    '#name' => 3,
+  );
+
+
+  // Highest Wicket Fall
+
+  $form['highest_wicket_fall'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Highest Wicket Fall',
+  );
+
+  $form['highest_wicket_fall']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 4, // Form ID
+  );
+
+  $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+
+  $form['highest_wicket_fall']['options'] = array(
+    '#type' => 'radios',
+    '#options' => $active,
+  );
+
+  $form['highest_wicket_fall']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click to Join'),
+    '#submit' => array('save_highest_wicket_fall'),
+    '#name' => 4,
+  );
+
+
+  // Highest 4's in match
+
+  $form['highest_fours_match'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Highest 4s in match',
+  );
+
+  $form['highest_fours_match']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 5, // Form ID
+  );
+
+  $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+
+  $form['highest_fours_match']['options'] = array(
+    '#type' => 'radios',
+    '#options' => $active,
+  );
+
+  $form['highest_fours_match']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click to Join'),
+    '#submit' => array('save_highest_fours_match'),
+    '#name' => 5,
+  );
+
+
+  // Highest 6's in match
+
+  $form['highest_six_match'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Highest 6s in match',
+  );
+
+  $form['highest_six_match']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 6, // Form ID
+  );
+
+  $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+
+  $form['highest_six_match']['options'] = array(
+    '#type' => 'radios',
+    '#options' => $active,
+  );
+
+  $form['highest_six_match']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click to Join'),
+    '#submit' => array('save_highest_six_match'),
+    '#name' => 6,
+  );
+
+  // Extra runs given
+
+  $form['extra_runs_given'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Extra runs given',
+  );
+
+  $form['extra_runs_given']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 7, // Form ID
+  );
+
+  $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+
+  $form['extra_runs_given']['options'] = array(
+    '#type' => 'radios',
+    '#options' => $active,
+  );
+
+  $form['extra_runs_given']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click to Join'),
+    '#submit' => array('save_extra_runs_given'),
+    '#name' => 7,
+  );
+
+  // Top Batsman in Match
+
+  $form['top_batsman_match'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Top Batsman in Match',
+  );
+
+  $form['top_batsman_match']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 8, // Form ID
+  );
+
+  $active = array('A' => $teamA, 'B' => $teamB);
+
+  $form['top_batsman_match']['options'] = array(
+    '#type' => 'radios',
+    '#options' => $active,
+  );
+
+  $form['top_batsman_match']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click to Join'),
+    '#submit' => array('save_top_batsman_match'),
+    '#name' => 8,
+  );
+
+
+  // Top Bowler in Match
+
+  $form['top_bowler_match'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Top Bowler in Match',
+  );
+
+  $form['top_bowler_match']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 9, // Form ID
+  );
+
+  $active = array('A' => $teamA, 'B' => $teamB);
+
+  $form['top_bowler_match']['options'] = array(
+    '#type' => 'radios',
+    '#options' => $active,
+  );
+
+  $form['top_bowler_match']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click to Join'),
+    '#submit' => array('save_top_bowler_match'),
+    '#name' => 9,
+  );
+
+
+  // Highest Opening Partnership
+
+  $form['highest_partnership'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Highest Opening Partnership',
+  );
+
+  $form['highest_partnership']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 10, // Form ID
+  );
+
+  $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+
+  $form['highest_partnership']['options'] = array(
+    '#type' => 'radios',
+    '#options' => $active,
+  );
+
+  $form['highest_partnership']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click to Join'),
+    '#submit' => array('save_highest_partnership'),
+    '#name' => 10,
+  );
+
+  // Highest Catch Out Without Including Keeper
+
+  $form['highest_catch_without_keeper'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Highest Catch Out Without Including Keeper',
+  );
+
+  $form['highest_catch_without_keeper']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 11, // Form ID
+  );
+
+  $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+
+  $form['highest_catch_without_keeper']['options'] = array(
+    '#type' => 'radios',
+    '#options' => $active,
+  );
+
+  $form['highest_catch_without_keeper']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click to Join'),
+    '#submit' => array('save_highest_catch_without_keeper'),
+    '#name' => 11,
+  );
+
+
+  // Highest Dismissal by Keeper
+
+  $form['highest_dismissal_keeper'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Highest Dismissal by Keeper',
+  );
+
+  $form['highest_dismissal_keeper']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 12, // Form ID
+  );
+
+  $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+
+  $form['highest_dismissal_keeper']['options'] = array(
+    '#type' => 'radios',
+    '#options' => $active,
+  );
+
+  $form['highest_dismissal_keeper']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click to Join'),
+    '#submit' => array('save_highest_dismissal_keeper'),
+    '#name' => 12,
+  );
+
+  // Player Score 50
+  $form['player_score_50'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Player Score 50',
+  );
+
+  $form['player_score_50']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 13, // Form ID
+  );
+
+  $active = array('A' => $teamA, 'B' => $teamB);
+
+  $form['player_score_50']['options'] = array(
+    '#type' => 'radios',
+    '#options' => $active,
+  );
+
+  $form['player_score_50']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click to Join'),
+    '#submit' => array('save_player_score_50'),
+    '#name' => 13,
+  );
+
+
+  // Highest Powerplay Boundaries
+  $form['highest_poweplay_4s'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Highest Powerplay Boundaries',
+  );
+
+  $form['highest_poweplay_4s']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 14, // Form ID
+  );
+
+  $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+
+  $form['highest_poweplay_4s']['options'] = array(
+    '#type' => 'radios',
+    '#options' => $active,
+  );
+
+  $form['highest_poweplay_4s']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Click to Join'),
+    '#submit' => array('save_highest_poweplay_4s'),
+    '#name' => 14,
+  );
+
+  return $form;
+}
+
+function save_match_winner($form, &$form_state) {
+   dpm("222");
+  // dpm($form_state);
+  global $user;
+
+  $uid = $user->uid;
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['match_winner']['form_id']['#value']) ? $form_state['complete form']['match_winner']['form_id']['#value']: NULL;
+  $option = isset($form_state['complete form']['match_winner']['options']['#value'])? $form_state['complete form']['match_winner']['options']['#value']: NULL;
+
+  dpm($nid);
+
+  watchdog('betting_module', print_r($uid . $nid . $form_id .$option, TRUE));
+  check_and_update_data($uid, $nid, $form_id, $option);
+  drupal_goto('payment-form');
+}
+
+
+
+function check_and_update_data($uid, $nid, $form_id, $option) {
+  $query = db_select('betting', 'at')
+        -> fields('at', array())
+        -> condition('at.uid', $uid)
+        -> condition('at.form_id', $form_id)
+        -> condition('at.nid', $nid);
+  $data = $query->execute()->fetchAll();
+
+  if (empty($data)) {
+    $nid = db_insert('betting')
+      ->fields(array(
+        'uid' => intval($uid),
+        'nid' => intval($nid),
+        'form_id' => intval($form_id),
+        'select_value' => $option,
+        'timestamp' => REQUEST_TIME,
+      ))
+      ->execute();
+  }
+
+  else {
+    $num_updated = db_update('betting')
+      ->fields(array(
+        'select_value' => $option,
+      ))
+      -> condition('uid', $uid)
+      -> condition('form_id', $form_id)
+      -> condition('nid', $nid)
+      ->execute();
+  }
+}
+
+function save_match_toss($form, &$form_state) {
+  dpm("111");
+  global $user;
+
+  $uid = $user->uid;
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['match_toss']['form_id']['#value']) ? $form_state['complete form']['match_toss']['form_id']['#value']: NULL;
+  dpm($form_id);
+  $option = isset($form_state['complete form']['match_toss']['options']['#value'])? $form_state['complete form']['match_toss']['options']['#value']: NULL;
+
+  check_and_update_data($uid, $nid, $form_id, $option);
+  drupal_goto('payment-form');
+}
+
+
+
+function save_match_powerplay_runs($form, &$form_state) {
+  global $user;
+
+  $uid = $user->uid;
+  dpm($form_state['complete form']['match_powerplay_runs']['form_id']);
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['match_powerplay_runs']['form_id']['#value']) ? $form_state['complete form']['match_powerplay_runs']['form_id']['#value']: NULL;
+  dpm($form_id);
+  $option = isset($form_state['complete form']['match_powerplay_runs']['options']['#value'])? $form_state['complete form']['match_powerplay_runs']['options']['#value']: NULL;
+
+  check_and_update_data($uid, $nid, $form_id, $option);
+  drupal_goto('payment-form');
+}
+
+
+function save_highest_wicket_fall($form, &$form_state) {
+  global $user;
+
+  $uid = $user->uid;
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['highest_wicket_fall']['form_id']['#value']) ? $form_state['complete form']['highest_wicket_fall']['form_id']['#value']: NULL;
+  dpm($form_id);
+  $option = isset($form_state['complete form']['highest_wicket_fall']['options']['#value'])? $form_state['complete form']['highest_wicket_fall']['options']['#value']: NULL;
+
+  check_and_update_data($uid, $nid, $form_id, $option);
+  drupal_goto('payment-form');
+
+}
+
+function save_highest_fours_match($form, &$form_state) {
+  global $user;
+
+  $uid = $user->uid;
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['highest_fours_match']['form_id']['#value']) ? $form_state['complete form']['highest_fours_match']['form_id']['#value']: NULL;
+  dpm($form_id);
+  $option = isset($form_state['complete form']['highest_fours_match']['options']['#value'])? $form_state['complete form']['highest_fours_match']['options']['#value']: NULL;
+
+  check_and_update_data($uid, $nid, $form_id, $option);
+  drupal_goto('payment-form');
+
+}
+
+function save_highest_six_match($form, &$form_state) {
+  global $user;
+
+  $uid = $user->uid;
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['highest_six_match']['form_id']['#value']) ? $form_state['complete form']['highest_six_match']['form_id']['#value']: NULL;
+  dpm($form_id);
+  $option = isset($form_state['complete form']['highest_six_match']['options']['#value'])? $form_state['complete form']['highest_six_match']['options']['#value']: NULL;
+
+  check_and_update_data($uid, $nid, $form_id, $option);
+  drupal_goto('payment-form');
+
+}
+
+function save_extra_runs_given($form, &$form_state) {
+  global $user;
+
+  $uid = $user->uid;
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['extra_runs_given']['form_id']['#value']) ? $form_state['complete form']['extra_runs_given']['form_id']['#value']: NULL;
+  dpm($form_id);
+  $option = isset($form_state['complete form']['extra_runs_given']['options']['#value'])? $form_state['complete form']['extra_runs_given']['options']['#value']: NULL;
+
+  check_and_update_data($uid, $nid, $form_id, $option);
+  drupal_goto('payment-form');
+
+}
+
+function save_top_batsman_match($form, &$form_state) {
+  global $user;
+
+  $uid = $user->uid;
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['top_batsman_match']['form_id']['#value']) ? $form_state['complete form']['top_batsman_match']['form_id']['#value']: NULL;
+  dpm($form_id);
+  $option = isset($form_state['complete form']['top_batsman_match']['options']['#value'])? $form_state['complete form']['top_batsman_match']['options']['#value']: NULL;
+
+  check_and_update_data($uid, $nid, $form_id, $option);
+  drupal_goto('payment-form');
+
+}
+
+
+function save_top_bowler_match($form, &$form_state) {
+  global $user;
+
+  $uid = $user->uid;
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['top_bowler_match']['form_id']['#value']) ? $form_state['complete form']['top_bowler_match']['form_id']['#value']: NULL;
+  dpm($form_id);
+  $option = isset($form_state['complete form']['top_bowler_match']['options']['#value'])? $form_state['complete form']['top_bowler_match']['options']['#value']: NULL;
+
+  check_and_update_data($uid, $nid, $form_id, $option);
+  drupal_goto('payment-form');
+}
+
+function save_highest_partnership($form, $form_state) {
+  global $user;
+
+  $uid = $user->uid;
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['highest_partnership']['form_id']['#value']) ? $form_state['complete form']['highest_partnership']['form_id']['#value']: NULL;
+  dpm($form_id);
+  $option = isset($form_state['complete form']['highest_partnership']['options']['#value'])? $form_state['complete form']['highest_partnership']['options']['#value']: NULL;
+
+  check_and_update_data($uid, $nid, $form_id, $option);
+  drupal_goto('payment-form');
+}
+
+function save_highest_catch_without_keeper($form, $form_state) {
+  global $user;
+
+  $uid = $user->uid;
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['highest_catch_without_keeper']['form_id']['#value']) ? $form_state['complete form']['highest_catch_without_keeper']['form_id']['#value']: NULL;
+  dpm($form_id);
+  $option = isset($form_state['complete form']['highest_catch_without_keeper']['options']['#value'])? $form_state['complete form']['highest_catch_without_keeper']['options']['#value']: NULL;
+
+  check_and_update_data($uid, $nid, $form_id, $option);
+  drupal_goto('payment-form');
+}
+
+function save_player_score_50($form, $form_state) {
+  global $user;
+
+  $uid = $user->uid;
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['player_score_50']['form_id']['#value']) ? $form_state['complete form']['player_score_50']['form_id']['#value']: NULL;
+  dpm($form_id);
+  $option = isset($form_state['complete form']['player_score_50']['options']['#value'])? $form_state['complete form']['player_score_50']['options']['#value']: NULL;
+
+  check_and_update_data($uid, $nid, $form_id, $option);
+  drupal_goto('payment-form');
+}
+
+function save_highest_poweplay_4s($form, $form_state) {
+  global $user;
+
+  $uid = $user->uid;
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['highest_poweplay_4s']['form_id']['#value']) ? $form_state['complete form']['highest_poweplay_4s']['form_id']['#value']: NULL;
+  dpm($form_id);
+  $option = isset($form_state['complete form']['highest_poweplay_4s']['options']['#value'])? $form_state['complete form']['highest_poweplay_4s']['options']['#value']: NULL;
+
+  check_and_update_data($uid, $nid, $form_id, $option);
+  drupal_goto('payment-form');
+}
+
+
+function save_highest_dismissal_keeper($form, $form_state) {
+  global $user;
+
+  $uid = $user->uid;
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['highest_dismissal_keeper']['form_id']['#value']) ? $form_state['complete form']['highest_dismissal_keeper']['form_id']['#value']: NULL;
+  dpm($form_id);
+  $option = isset($form_state['complete form']['highest_dismissal_keeper']['options']['#value'])? $form_state['complete form']['highest_dismissal_keeper']['options']['#value']: NULL;
+
+  check_and_update_data($uid, $nid, $form_id, $option);
+  drupal_goto('payment-form');
+}

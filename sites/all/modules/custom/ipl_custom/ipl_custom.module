@@ -1,0 +1,196 @@
+<?php
+
+function ipl_custom_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'ipl_matches_node_form') {
+    // dpm($form);
+  }
+}
+
+
+/**
+ * Implements hook_menu().
+ */
+function ipl_custom_menu() {
+  $items['payment-form'] = array(
+    'page callback' => 'payment_gateway',
+    'type' => MENU_CALLBACK,
+    'access callback' => TRUE,
+  );
+
+  return $items;
+}
+
+function payment_gateway() {
+  $renderable_form = drupal_get_form('payment_form');
+
+  return $renderable_form;
+}
+
+
+function payment_form($form, &$form_state) {
+   $form['key'] = array(
+    '#title' => 'Key',
+    '#description' => 'Unique key provided by Payu',
+    '#type' => 'textfield',
+    '#required' => TRUE,
+    '#default_value' => '4SzPYEtL',
+  );
+
+
+  $form['txnid'] = array(
+    '#title' => 'Transaction ID',
+    '#description' => 'Transaction id/ reference id generated at your end',
+    '#type' => 'textfield',
+    '#required' => TRUE,
+  );
+
+  $form['amount'] = array(
+    '#title' => 'Amount',
+    '#description' => 'Amount payable by the customer',
+    '#type' => 'textfield',
+    '#required' => TRUE,
+    // '#element_validate' => array('two_digits_after_decimal'),
+
+  );
+
+  $form['productinfo'] = array(
+    '#title' => 'Small Description For Payment',
+    '#description' => 'Small description of product, a string defining your product',
+    '#type' => 'textfield',
+    '#required' => TRUE,
+  );
+
+  $form['firstname'] = array(
+    '#title' => 'First Name',
+    '#description' => 'First name of the customer',
+    '#type' => 'textfield',
+    '#required' => TRUE,
+  );
+
+  $form['email'] = array(
+    '#title' => 'Email ID',
+    '#description' => 'Email id of the customer',
+    '#type' => 'textfield',
+    '#required' => TRUE,
+    '#element_validate' => array('user_profile_email_element_validate'),
+  );
+
+  $form['phone'] = array(
+    '#type' => 'textfield',
+    '#title' => 'Contact',
+    '#required' => TRUE,
+    '#description' => "Phone number of the customer",
+    '#element_validate' => array('user_profile_contact_element_validate'),
+  );
+
+  $form['surl'] = array(
+    '#title' => 'Success URL',
+    '#description' => 'Redirect URL (your site) in case of a successful transaction',
+    '#type' => 'textfield',
+    '#default_value' => 'http://ipl.local'
+  );
+
+
+  $form['furl'] = array(
+    '#title' => 'Failure URL',
+    '#description' => 'Redirect URL (your site) in case of a failed transaction',
+    '#type' => 'textfield',
+    '#default_value' => 'http://ipl.local'
+  );
+
+  $form['hash'] = array(
+    '#title' => 'SHA Key',
+    '#description' => 'Security parameter to avoid tampering',
+    '#type' => 'textfield',
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save'),
+  );
+
+  return $form;
+}
+
+
+/**
+ * Validations on a User Registration Form
+ */
+
+function user_profile_email_element_validate($element, &$form_state, $form) {
+   if (!valid_email_address($element['#value'])) {
+     form_error($element, t('Please enter a valid email address.'));
+   }
+}
+
+function user_profile_contact_element_validate($element, &$form_state, $form) {
+   if (!is_numeric($element['#value'])) {
+     form_error($element, t('Please enter a valid contact number.'));
+   }
+   elseif (strlen($element['#value']) > 50) {
+    form_error($element, t('Contact number limit exceeds 50'));
+   }
+}
+
+
+function payment_form_submit($form, &$form_state) {
+  $PAYU_BASE_URL = "https://test.payu.in";
+
+  // Merchant key here as provided by Payu
+  $MERCHANT_KEY = '4SzPYEtL';
+
+  // Merchant Salt as provided by Payu
+  $SALT = "zduWMLk4ma";
+
+  $formError = 0;
+
+  if(empty($form_state['values']['txnid'])) {
+    // Generate random transaction id
+    $txnid = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
+  }
+  else {
+    $txnid = $form_state['values']['txnid'];
+  }
+
+  $hash = '';
+  // Hash Sequence
+
+  $key = $form_state['values']['key'];
+  $amount = $form_state['values']['amount'];
+  $info = $form_state['values']['productinfo'];
+  $firstname = $form_state['values']['firstname'];
+  $mail = $form_state['values']['email'];
+  $phone = $form_state['values']['phone'];
+  $surl = $form_state['values']['surl'];
+  $furl = $form_state['values']['furl'];
+  $hash = $form_state['values']['hash'];
+
+
+  $hash_string = $key . "|" . $txnid . "|" . $amount . "|" . $info . "|" .  $firstname . "|" .  $mail . "|" . $phone . "|" . $surl . "|" . $furl . "|" . $hash;
+
+
+  $hash_string .= $SALT;
+  dpm($hash_string);
+
+
+  $hash = strtolower(hash('sha512', $hash_string));
+  dpm($hash);
+  drupal_goto($PAYU_BASE_URL . '/_payment');
+}
+
+
+
+function check_betting_time($nid) {
+  $node = node_load($nid);
+
+  if (isset($node->field_betting_time['und'][0]['value']) && !empty($node->field_betting_time['und'][0]['value'])) {
+    $betting_time = $node->field_betting_time['und'][0]['value'];
+    $betting_time = strtotime($betting_time);
+    $current_time = REQUEST_TIME;
+
+    if ($current_time < $betting_time) {
+       return TRUE;
+    }
+    return FALSE;
+  }
+}

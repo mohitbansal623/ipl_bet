@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Matches View feature.
+ */
+
+include_once 'matches_view.features.inc';
