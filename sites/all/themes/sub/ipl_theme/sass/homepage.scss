@@ -1,0 +1,117 @@
+/* ---- particles.js container ---- */
+.navbar.container {
+    background: transparent;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 50px;
+    border: none;
+    color: #fff;
+}
+#navbar.navbar-default .navbar-nav > li > a{color:#fff;text-transform:uppercase;font-weight:bold;}
+#navbar.navbar-default .navbar-nav > .active > a, #navbar#navbar.navbar-default .navbar-nav > .active > a:hover, #navbar.navbar-default .navbar-nav > .active > a:focus{
+  background:transparent;
+  color:#f2c900;
+}
+#navbar.navbar-default .navbar-nav > li > a:hover{color:#f2c900;}
+#navbar .name.navbar-brand {
+  color: white;
+  text-transform:uppercase;font-weight:bold;
+}
+#particles-js{
+  width: 100%;
+  height: 100%;
+  background-image: url('');
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  position: fixed;
+  top:0;
+  z-index: 0;
+}
+.page-container.fixed-page {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+.page-container.fixed-page >.banner {
+    background:url('ipl10.jpg');
+    background-size:cover;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    position: fixed;
+    z-index:1;
+}
+.page-container.fixed-page >.banner:after{
+  content:'';
+  position:absolute;
+  height:100%;
+  width:100%;
+  top:0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index:0;
+}
+.button.default {
+    background: #f2c900;
+    color: #fff;
+}
+.button {
+    position: relative;
+    display: inline-block;
+    font-size: 12px;
+    padding: 1.125rem 3rem;
+    line-height: 1;
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+    border: 2px solid transparent;
+    text-decoration:none;
+}
+.button.default:hover, .button.default:focus {
+    background: transparent;
+    border: 2px solid #f2c900;
+    color: #f2c900;
+    text-decoration:none;
+}
+.button.whitehole {
+    border: 2px solid #fff;
+    color: #fff;
+}
+.button.whitehole:hover, .button.whitehole:focus {
+    background: #fff;
+    color: #414141;
+    text-decoration:none;
+}
+.button.whitehole {
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+.button.whitehole:hover, .button.whitehole:focus {
+    background: #fff;
+    color: #414141;
+}
+.banner-content {
+    position: relative;
+    z-index: 1;
+}
+.banner-content h2 {
+    font-size: 4rem;
+    text-transform:uppercase;
+    margin-bottom:50px;
+}
+.banner-block {
+    margin-top: 100px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    height: 100%;
+    align-items: center;
+    max-width: 70%;
+    color: #fff;
+    justify-content: center;
+}

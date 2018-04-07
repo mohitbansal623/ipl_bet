@@ -1,0 +1,160 @@
+/* ---- particles.js container ---- */
+/* line 2, ../sass/homepage.scss */
+.navbar.container {
+  background: transparent;
+  width: 100%;
+  max-width: 100%;
+  padding: 0 50px;
+  border: none;
+  color: #fff;
+}
+
+/* line 10, ../sass/homepage.scss */
+#navbar.navbar-default .navbar-nav > li > a {
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* line 11, ../sass/homepage.scss */
+#navbar.navbar-default .navbar-nav > .active > a, #navbar#navbar.navbar-default .navbar-nav > .active > a:hover, #navbar.navbar-default .navbar-nav > .active > a:focus {
+  background: transparent;
+  color: #f2c900;
+}
+
+/* line 15, ../sass/homepage.scss */
+#navbar.navbar-default .navbar-nav > li > a:hover {
+  color: #f2c900;
+}
+
+/* line 16, ../sass/homepage.scss */
+#navbar .name.navbar-brand {
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* line 20, ../sass/homepage.scss */
+#particles-js {
+  width: 100%;
+  height: 100%;
+  background-image: url("");
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  position: fixed;
+  top: 0;
+  z-index: 0;
+}
+
+/* line 31, ../sass/homepage.scss */
+.page-container.fixed-page {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* line 37, ../sass/homepage.scss */
+.page-container.fixed-page > .banner {
+  background: url("ipl10.jpg");
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  position: fixed;
+  z-index: 1;
+}
+
+/* line 46, ../sass/homepage.scss */
+.page-container.fixed-page > .banner:after {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 0;
+}
+
+/* line 55, ../sass/homepage.scss */
+.button.default {
+  background: #f2c900;
+  color: #fff;
+}
+
+/* line 59, ../sass/homepage.scss */
+.button {
+  position: relative;
+  display: inline-block;
+  font-size: 12px;
+  padding: 1.125rem 3rem;
+  line-height: 1;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bold;
+  position: relative;
+  z-index: 1;
+  border: 2px solid transparent;
+  text-decoration: none;
+}
+
+/* line 73, ../sass/homepage.scss */
+.button.default:hover, .button.default:focus {
+  background: transparent;
+  border: 2px solid #f2c900;
+  color: #f2c900;
+  text-decoration: none;
+}
+
+/* line 79, ../sass/homepage.scss */
+.button.whitehole {
+  border: 2px solid #fff;
+  color: #fff;
+}
+
+/* line 83, ../sass/homepage.scss */
+.button.whitehole:hover, .button.whitehole:focus {
+  background: #fff;
+  color: #414141;
+  text-decoration: none;
+}
+
+/* line 88, ../sass/homepage.scss */
+.button.whitehole {
+  border: 2px solid #fff;
+  color: #fff;
+}
+
+/* line 93, ../sass/homepage.scss */
+.button.whitehole:hover, .button.whitehole:focus {
+  background: #fff;
+  color: #414141;
+}
+
+/* line 97, ../sass/homepage.scss */
+.banner-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* line 101, ../sass/homepage.scss */
+.banner-content h2 {
+  font-size: 4rem;
+  text-transform: uppercase;
+  margin-bottom: 50px;
+}
+
+/* line 106, ../sass/homepage.scss */
+.banner-block {
+  margin-top: 100px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+  align-items: center;
+  max-width: 70%;
+  color: #fff;
+  justify-content: center;
+}
