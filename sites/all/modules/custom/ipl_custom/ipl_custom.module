@@ -17,7 +17,135 @@ function ipl_custom_menu() {
     'access callback' => TRUE,
   );
 
+  $items['admin/config/match-results'] = array(
+    'title' => 'Match Result Data',
+    'description' => 'Fill the results after match is over',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('custom_match_configuration'),
+    'access callback' => array('check_role'),
+  );
+
   return $items;
+}
+
+
+function check_role() {
+  global $user;
+  $roles = $user->roles;
+
+  if (in_array('Admin', $roles) || in_array('administrator', $roles)) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+
+function custom_match_configuration($form, &$form_state) {
+  $form['match_results'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Match Results',
+  );
+
+  $form['match_results']['match_winner'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Match Winner'),
+    '#description' => t('Fill A if Team A wins and B if Team B'),
+    '#default_value' => variable_get('match_winner', ''),
+  );
+
+  $form['match_results']['match_toss'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Match Toss'),
+    '#description' => t('Fill A if Team A wins and B if Team B'),
+    '#default_value' => variable_get('match_toss', ''),
+  );
+
+  $form['match_results']['match_powerplay_runs'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Highest Powerplay Runs'),
+    '#description' => t('Fill A if Team A wins and B if Team B'),
+    '#default_value' => variable_get('match_powerplay_runs', ''),
+  );
+
+  $form['match_results']['highest_wicket_fall'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Highest Wicket Fall'),
+    '#description' => t('Fill A if Team A wins and B if Team B'),
+    '#default_value' => variable_get('highest_wicket_fall', ''),
+  );
+
+  $form['match_results']['highest_fours_match'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Highest 4s in match'),
+    '#description' => t('Fill A if Team A wins and B if Team B'),
+    '#default_value' => variable_get('highest_fours_match', ''),
+  );
+
+  $form['match_results']['highest_six_match'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Highest 6s in match'),
+    '#description' => t('Fill A if Team A wins and B if Team B'),
+    '#default_value' => variable_get('highest_six_match', ''),
+  );
+
+  $form['match_results']['extra_runs_given'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Extra runs given'),
+    '#description' => t('Fill A if Team A wins and B if Team B'),
+    '#default_value' => variable_get('extra_runs_given', ''),
+  );
+
+  $form['match_results']['top_batsman_match'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Top Batsman in Match'),
+    '#description' => t('Fill A if Team A wins and B if Team B'),
+    '#default_value' => variable_get('top_batsman_match', ''),
+  );
+
+  $form['match_results']['top_bowler_match'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Top Bowler in Match'),
+    '#description' => t('Fill A if Team A wins and B if Team B'),
+    '#default_value' => variable_get('top_bowler_match', ''),
+  );
+
+  $form['match_results']['highest_partnership'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Highest Opening Partnership'),
+    '#description' => t('Fill A if Team A wins and B if Team B'),
+    '#default_value' => variable_get('highest_partnership', ''),
+  );
+
+  $form['match_results']['highest_catch_without_keeper'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Highest Catch Out Without Including Keeper'),
+    '#description' => t('Fill A if Team A wins and B if Team B'),
+    '#default_value' => variable_get('highest_catch_without_keeper', ''),
+  );
+
+  $form['match_results']['highest_dismissal_keeper'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Highest Dismissal by Keeper'),
+    '#description' => t('Fill A if Team A wins and B if Team B'),
+    '#default_value' => variable_get('highest_dismissal_keeper', ''),
+  );
+
+  $form['match_results']['player_score_50'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Player Score 50'),
+    '#description' => t('Fill A if Team A wins and B if Team B'),
+    '#default_value' => variable_get('player_score_50', ''),
+  );
+
+  $form['match_results']['highest_poweplay_4s'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Highest Powerplay Boundaries'),
+    '#description' => t('Fill A if Team A wins and B if Team B'),
+    '#default_value' => variable_get('highest_poweplay_4s', ''),
+  );
+
+  return system_settings_form($form);
 }
 
 function payment_gateway() {
