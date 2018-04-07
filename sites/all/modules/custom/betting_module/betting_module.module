@@ -113,13 +113,11 @@ function betting_form($form, &$form_state) {
    '#value' => 3, // Form ID
   );
 
-  $tie = $teamC;
   $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
 
   $form['match_powerplay_runs']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
-    '#required' => FALSE,
   );
 
   $form['match_powerplay_runs']['submit'] = array(
