@@ -12,6 +12,13 @@ function betting_module_menu() {
     'access callback' => 'check_access',
   );
 
+  $items['pay-form'] = array(
+    'title' => 'Pay Form',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('pay_form'),
+    'access callback' => TRUE,
+  );
+
   return $items;
 }
 
@@ -651,4 +658,69 @@ function save_highest_dismissal_keeper($form, $form_state) {
 
   check_and_update_data($uid, $nid, $form_id, $option);
   drupal_goto('payment-form');
+}
+
+
+
+function pay_form($form, &$form_state) {
+  $form['order_id'] = array(
+    '#title' => 'ORDER_ID',
+    '#description' => 'Order ID',
+    '#type' => 'textfield',
+    '#required' => TRUE,
+  );
+
+
+  $form['cust_id'] = array(
+    '#title' => 'CUST_ID',
+    '#type' => 'textfield',
+    '#description' => 'Customer ID',
+    '#required' => TRUE,
+  );
+
+  $form['industry_type_id'] = array(
+    '#title' => 'INDUSTRY_TYPE_ID',
+    '#description' => 'Industry Type ID',
+    '#type' => 'textfield',
+    '#required' => TRUE,
+  );
+
+  $form['channel_id'] = array(
+    '#title' => 'CHANNEL_ID',
+    '#description' => 'Channel ID',
+    '#type' => 'textfield',
+    '#required' => TRUE,
+  );
+
+  $form['txn_amt'] = array(
+    '#title' => 'TXN_AMOUNT',
+    '#description' => 'Transaction Amount',
+    '#type' => 'textfield',
+    '#required' => TRUE,
+    '#element_validate' => array('amount_element_validate'),
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Proceed'),
+    '#submit' => array('pay_submit'),
+    '#name' => 100,
+  );
+
+  return $form;
+}
+
+
+function pay_submit($form, &$form_state) {
+  dpm($form_state);
+}
+
+
+function amount_element_validate($element, &$form_state, $form) {
+   if (!is_numeric($element['#value'])) {
+     form_error($element, t('Please enter a valid amount number.'));
+   }
+   elseif ($element['#value'] % 10 != 0) {
+    form_error($element, t('Amount must be in multiples of 10'));
+   }
 }

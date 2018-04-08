@@ -25,6 +25,29 @@ function ipl_custom_menu() {
     'access callback' => array('check_role'),
   );
 
+  $items['admin/config/pay-online'] = array(
+    'title' => "Max Pay online",
+    'description' => 'set merchant id, product info and salt for pay-online',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('max_payu_admin_settings'),
+    'access callback' => 'user_access',
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items['pay-online-payment-status'] = array(
+    'title' => 'Pay Online',
+    'page callback' => 'max_payu_payment_status',
+    'access callback' => TRUE,
+  );
+
+  $items['pay-online-submission'] = array(
+    'title' => 'Pay Online',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('max_payu_submission'),
+    'access callback' => TRUE,
+  );
+
   return $items;
 }
 
@@ -156,88 +179,74 @@ function payment_gateway() {
 
 
 function payment_form($form, &$form_state) {
-   $form['key'] = array(
-    '#title' => 'Key',
-    '#description' => 'Unique key provided by Payu',
+
+  drupal_add_js(drupal_get_path('module', 'ipl_custom') .'/ipl_form.js', 'file');
+
+  if (!isset($form_state['payu_param_status']) && !$form_state['payu_param_status']) {
+
+    $form['max_payu_user_name'] = array(
+    '#title' => 'Full Name',
+    '#description' => 'Full Name',
     '#type' => 'textfield',
     '#required' => TRUE,
-    '#default_value' => '4SzPYEtL',
-  );
+    );
 
+    $form['max_payu_user_phone'] = array(
+      '#title' => 'Phone No',
+      '#type' => 'textfield',
+      '#description' => 'Phone Number',
+      '#required' => TRUE,
+    );
 
-  $form['txnid'] = array(
-    '#title' => 'Transaction ID',
-    '#description' => 'Transaction id/ reference id generated at your end',
-    '#type' => 'textfield',
-    '#required' => TRUE,
-  );
+    $form['max_payu_user_email'] = array(
+      '#title' => 'Email',
+      '#description' => 'Email',
+      '#type' => 'textfield',
+      '#required' => TRUE,
+    );
 
-  $form['amount'] = array(
-    '#title' => 'Amount',
-    '#description' => 'Amount payable by the customer',
-    '#type' => 'textfield',
-    '#required' => TRUE,
-    // '#element_validate' => array('two_digits_after_decimal'),
+    $form['max_payu_user_amount'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Amount'),
+      '#required' => TRUE,
+      '#element_validate' => array('element_validate_integer_positive'),
+    );
 
-  );
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('PAY NOW'),
+      '#suffix' => '</div>',
+    );
 
-  $form['productinfo'] = array(
-    '#title' => 'Small Description For Payment',
-    '#description' => 'Small description of product, a string defining your product',
-    '#type' => 'textfield',
-    '#required' => TRUE,
-  );
+    return $form;
+  }
+  else {
+    if (isset($form_state['payu_params']) && !empty($form_state['payu_params'])) {
 
-  $form['firstname'] = array(
-    '#title' => 'First Name',
-    '#description' => 'First name of the customer',
-    '#type' => 'textfield',
-    '#required' => TRUE,
-  );
+      $params = $form_state['payu_params'];
 
-  $form['email'] = array(
-    '#title' => 'Email ID',
-    '#description' => 'Email id of the customer',
-    '#type' => 'textfield',
-    '#required' => TRUE,
-    '#element_validate' => array('user_profile_email_element_validate'),
-  );
+      $form['max_payu_submission_message'] = array(
+        '#markup' => '<div class="max_payu_message"><p>Please do not press back button, we are redirecting you on payu page.</p></div>'
+      );
 
-  $form['phone'] = array(
-    '#type' => 'textfield',
-    '#title' => 'Contact',
-    '#required' => TRUE,
-    '#description' => "Phone number of the customer",
-    '#element_validate' => array('user_profile_contact_element_validate'),
-  );
+      foreach ($params as $key => $value) {
+        $form[$key] = array(
+          '#type' => 'hidden',
+          '#value' => t($value),
+        );
+      }
 
-  $form['surl'] = array(
-    '#title' => 'Success URL',
-    '#description' => 'Redirect URL (your site) in case of a successful transaction',
-    '#type' => 'textfield',
-    '#default_value' => 'http://ipl.local'
-  );
+      $form['#action'] = url("https://test.payu.in/_payment");
 
+      $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Submit'),
+        '#attributes' => array('class' => array('redirect_to_submission')),
+      );
 
-  $form['furl'] = array(
-    '#title' => 'Failure URL',
-    '#description' => 'Redirect URL (your site) in case of a failed transaction',
-    '#type' => 'textfield',
-    '#default_value' => 'http://ipl.local'
-  );
-
-  $form['hash'] = array(
-    '#title' => 'SHA Key',
-    '#description' => 'Security parameter to avoid tampering',
-    '#type' => 'textfield',
-  );
-
-  $form['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Save'),
-  );
-
-  return $form;
+      return $form;
+    }
+  }
 }
 
 
@@ -261,50 +270,161 @@ function user_profile_contact_element_validate($element, &$form_state, $form) {
 }
 
 
+/**
+ * Submit Handler.
+ */
 function payment_form_submit($form, &$form_state) {
-  $PAYU_BASE_URL = "https://test.payu.in";
 
-  // Merchant key here as provided by Payu
-  $MERCHANT_KEY = '4SzPYEtL';
+  $form_state['rebuild'] = 1;
 
-  // Merchant Salt as provided by Payu
-  $SALT = "zduWMLk4ma";
+  $name = $form_state['values']['max_payu_user_name'];
+  $phone = $form_state['values']['max_payu_user_phone'];
+  $email = $form_state['values']['max_payu_user_email'];
 
-  $formError = 0;
+  $amount = $form_state['values']['max_payu_user_amount'];
+  $amount = number_format((float)$amount, 2, '.', '');
 
-  if(empty($form_state['values']['txnid'])) {
-    // Generate random transaction id
-    $txnid = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
+  if ($amount <= 1000) {
+    $salt = variable_get('max_payu_salt', '4T8BKeb0');
+    $merchant_key = variable_get('max_payu_merchant_key', 'sUccSb');
   }
   else {
-    $txnid = $form_state['values']['txnid'];
+    $salt = variable_get('max_payu_salt_greater_1k', 'gatRa450');
+    $merchant_key = variable_get('max_payu_merchant_key_greater_1k', 'OJ1x02');
   }
+  $txnid = max_payu_get_unique_transaction_id();
+  $productinfo = variable_get('max_payu_productinfo', 'maxprodpayu');
 
-  $hash = '';
-  // Hash Sequence
+  // Calculate sha512 hash value.
+  $sha512 = $merchant_key . '|' .$txnid .'|' . $amount . '|' . $productinfo . '|' . $name . '|' . $email .'|||||||||||' . $salt;
+  $hash_value = hash('sha512', $sha512);
 
-  $key = $form_state['values']['key'];
-  $amount = $form_state['values']['amount'];
-  $info = $form_state['values']['productinfo'];
-  $firstname = $form_state['values']['firstname'];
-  $mail = $form_state['values']['email'];
-  $phone = $form_state['values']['phone'];
-  $surl = $form_state['values']['surl'];
-  $furl = $form_state['values']['furl'];
-  $hash = $form_state['values']['hash'];
+  global $base_url;
+  $redirect_url = $base_url . '/pay-online-payment-status';
 
+  $options = array(
+    'key' => $merchant_key,
+    'txnid' => $txnid,
+    'amount' => $amount,
+    'productinfo' => $productinfo,
+    'firstname' => $name,
+    'email' => $email,
+    'phone' => $phone,
+    'surl' => $redirect_url,
+    'furl' => $redirect_url,
+    'curl' => $redirect_url,
+    'hash' => $hash_value,
+  );
 
-  $hash_string = $key . "|" . $txnid . "|" . $amount . "|" . $info . "|" .  $firstname . "|" .  $mail . "|" . $phone . "|" . $surl . "|" . $furl . "|" . $hash;
+  $form_state['payu_param_status'] = TRUE;
 
-
-  $hash_string .= $SALT;
-  dpm($hash_string);
-
-
-  $hash = strtolower(hash('sha512', $hash_string));
-  dpm($hash);
-  drupal_goto($PAYU_BASE_URL . '/_payment');
+  $form_state['payu_params'] = $options;
 }
+
+
+/*
+ * payment status page
+ *
+ * @return html
+ */
+function max_payu_payment_status() {
+  $options = array();
+
+  if (isset($_POST['status'])) {
+
+    $txnid = $_POST['txnid'];
+
+    // Value will be success or failure pending
+    $status = $_POST['status'];
+    $amount = $_POST['amount'];
+    $date = $_POST['addedon'];
+    $payment_mode = isset($_POST['mode']) ? $_POST['mode'] : '';
+    $card_type = isset($_POST['card_type']) ? $_POST['card_type'] : '';
+
+    // convert date in unix timestamp
+    $date = strtotime($date);
+    $transaction_details = array('transaction_id' => $txnid, 'amount' => $amount, 'status' => $status, 'added_on' => $date);
+
+
+    //insert transaction details in to db table
+    if (!empty($transaction_details)) {
+
+      /***********************************/
+      $user_details = $_SESSION['max_user_details'];
+
+      $max_id = $user_details["max_id"];
+      $max_id_data = explode('.', $max_id);
+
+      $options['Ipid'] = isset($user_details["ipid"]) ? $user_details["ipid"] : '';
+      $transaction_details['ip_id'] = $options['Ipid'];
+
+      $options['registrationno'] = !empty($max_id_data) ? (int)$max_id_data[1] : '';
+      $transaction_details['registration_no'] = $options['registrationno'];
+
+      $options['amount'] = isset($_POST['amount']) ? (int)$_POST['amount'] : '';
+
+      $options['hsplocationid'] = isset($user_details["HSPLocationId"]) ? $user_details["HSPLocationId"] : '';
+      $transaction_details['hpslocation_id'] = $options['hsplocationid'];
+
+      //   // String Values.
+      $options['iacode'] = !empty($max_id_data) ? $max_id_data[0] : '';
+      $transaction_details['ia_code'] = $options['iacode'];
+
+      $options['paidBy'] = isset($_POST["firstname"]) ? $_POST["firstname"] : '';
+      $transaction_details['paid_by'] = $options['paidBy'];
+
+      $options['PtnStatus'] = 'A';
+      $transaction_details['ptn_status'] = $options['PtnStatus'];
+
+      $options['TransactionId'] = isset($_POST["txnid"]) ? $_POST["txnid"] : '';
+
+      $options['OnlineContactNo'] = isset($_POST["phone"]) ? $_POST["phone"] : '';
+      $transaction_details['contact_no'] = $options['OnlineContactNo'];
+      $transaction_details['mihpayid'] = isset($_POST["mihpayid"]) ? $_POST["mihpayid"] : '';
+      $transaction_details['payment_mode'] = $payment_mode;
+      $transaction_details['card_type'] = $card_type;
+
+      $transaction_details['receipt_no'] = NULL;
+      /***********************************/
+
+
+      max_payu_insert_transaction_details($transaction_details);
+    }
+    if ($status == 'success') {
+
+      // Deposit detail at max server
+      // $maxPayuDetails = $_POST;
+      // $txn = $options['TransactionId'];
+      // $options["TransactionId"] = isset($_POST["mihpayid"]) ? $_POST["mihpayid"] : '';
+      // $receipt_no = max_payu_deposit_detail_on_maxserver($options);
+      $output = '<div id="payment-status-message"><p class="thank-you">THANK YOU</p><p class="status-message">Your online transaction with Maxhealthcare has been successful.</p>';
+      // if(!is_null($receipt_no)) {
+
+      //   try {
+      //     $receipt_updated = db_update('max_payu_transaction_details')
+      //     ->fields(array(
+      //       'reciept_no' => $receipt_no,
+      //     ))
+      //     ->condition('transaction_id', $txn, '=')
+      //     ->execute();
+      //   }
+      //   catch(Exception $e) {
+
+      //   }
+
+      //   $output .= '<p class="status-message">Your receipt no. is <span class="receipt-no">' . $receipt_no . '</span></p>';
+      // }
+      $output .= '<p class="status-message">Go to <a href="/">Home Page</a></p>';
+      $output .= '</div>';
+      return $output;
+    }
+    else {
+      $output = '<div id="payment-status-message"><p class="thank-you">OOPS!</p><p class="status-message">Transaction failed! <a href="/pay-online">Try Again</a></p></div>';
+      return $output;
+    }
+  }
+}
+
 
 
 
@@ -320,5 +440,236 @@ function check_betting_time($nid) {
        return TRUE;
     }
     return FALSE;
+  }
+}
+
+
+function amount_validate($element, &$form_state, $form) {
+  if (!is_numeric($element['#value'])) {
+   form_error($element, t('Please enter a valid amount number.'));
+  }
+  elseif ($element['#value'] % 10 != 0) {
+  form_error($element, t('Amount must be in multiples of 10'));
+  }
+}
+
+/**
+ * @file
+ * Contains max payu database related functions.
+ */
+
+/**
+ * create unique transaction id when user call this function
+ * @return string unique transaction id
+ */
+function max_payu_get_unique_transaction_id() {
+  $result = db_query("SELECT transaction_id FROM {max_payu_transaction_details}")->fetchAll();
+  //for first transaction id
+  if (count($result) == 0) {
+    $output = max_payu_create_transaction_id();
+    return $output;
+  }
+  else {
+    $transaction_id = max_payu_create_transaction_id();
+    $match_result = db_query('SELECT t.transaction_id FROM {max_payu_transaction_details} AS t WHERE t.transaction_id = :transaction_id', array(':transaction_id' => $transaction_id))->fetchAll();
+    // return value in case of unique transaction id only
+    if (!empty($match_result)) {
+      max_payu_get_unique_transaction_id();
+    }
+    else {
+      $output = $transaction_id;
+      return $output;
+    }
+  }
+}
+
+/**
+ * create random alphanumeric array of length between 8 and 25 characters
+ * @return string random alphanumeric array
+ */
+function max_payu_create_transaction_id() {
+  $capital_alphabets = range('A','Z');
+  $small_alphabets = range('a','z');
+  $numbers = range('0','9');
+  $characters = array_merge($capital_alphabets, $small_alphabets, $numbers);
+  $length = 8;
+  $max = count($characters) - 1;
+  $str = "";
+  for ($i = 0;  $i < $length; $i++) {
+    $rand = mt_rand(0, $max);
+    $str .= $characters[$rand];
+  }
+  $time = time();
+  $str = $str . $time;
+  return $str;
+}
+
+/**
+ * Insert transaction details in max_payu_transaction_details table and show error
+ * if insertion doesn't occur successfully.
+ *
+ * @param  array  $transaction_details
+ * Array of transaction details
+ */
+function max_payu_insert_transaction_details($transaction_details = array()) {
+  if (!empty($transaction_details)) {
+    $transaction_id = $transaction_details['transaction_id'];
+    $max_id = $transaction_details['max_id'];
+    $amount = $transaction_details['amount'];
+    $status = $transaction_details['status'];
+    $date = $transaction_details['added_on'];
+
+    try {
+      $result = db_insert('max_payu_transaction_details')
+      ->fields(array(
+        'transaction_id' => $transaction_id,
+        'max_id' => $max_id,
+        'amount' => $amount,
+        'status' => $status,
+        'added_on' => $date,
+        'ip_id' => $transaction_details['ip_id'],
+        'registration_no' => $transaction_details['registration_no'],
+        'hpslocation_id' => $transaction_details['hpslocation_id'],
+        'ia_code' => $transaction_details['ia_code'],
+        'paid_by' => $transaction_details['paid_by'],
+        'ptn_status' => $transaction_details['ptn_status'],
+        'contact_no' => $transaction_details['contact_no'],
+        'mihpayid' => $transaction_details['mihpayid'],
+        'payment_mode' => $transaction_details['payment_mode'],
+        'card_type' => $transaction_details['card_type'],
+      ))
+      ->execute();
+    }
+    catch(Exception $e) {
+      drupal_set_message(t('An error occurred while inserting transaction details and processing did not complete.'), 'error');
+    }
+  }
+}
+
+
+/**
+ * Get transcation ids.
+ *
+ * @return array
+ *   Having transcation ids.
+ */
+function max_payu_get_transcation_ids() {
+  $transcation_ids = array();
+  $query = db_select('max_payu_transaction_details', 'mpts')
+  ->fields('mpts', array('transaction_id'))
+  ->condition('mpts.status', 'success', '=')
+  ->condition('mpts.reciept_no', NULL)
+  ->orderBy('mpts.added_on', DESC);
+  $records = $query->execute();
+  if(!empty($records)) {
+    foreach ($records as $key => $record) {
+      $transcation_ids[] = $record->transaction_id;
+    }
+  }
+
+  return $transcation_ids;
+}
+
+
+/**
+ * @file
+ * Contains max payu admin setting form.
+ */
+
+/**
+ * To get an admin accessible form to set values for max payu
+ *
+ * @param  array $form
+ *   Having structure of the form.
+ * @param  array &$form_state
+ *   Having form information
+ *
+ * @return  array
+ *   Having form structure
+ */
+function max_payu_admin_settings($form, &$form_state) {
+  $form = array();
+
+  global $user;
+  $uid = $user->uid;
+  if ($user->uid != '1') {
+    $form['not_super_admin'] = array(
+      '#markup' => '<p>You are not allowed to view this form</p>',
+    );
+
+    return $form;
+  }
+  else {
+    $form['max_payu_merchant_key'] = array(
+      '#type' => 'textfield',
+      '#title' => t('PayU Merchant Key for less than or equal to 1k'),
+      '#size' => 25,
+      '#maxlength' => 25,
+      '#default_value' => variable_get('max_payu_merchant_key', 'sUccSb'),
+    );
+
+    $form['max_payu_merchant_key_greater_1k'] = array(
+      '#type' => 'textfield',
+      '#title' => t('PayU Merchant Key for greater than 1k'),
+      '#size' => 25,
+      '#maxlength' => 25,
+      '#default_value' => variable_get('max_payu_merchant_key_greater_1k', 'OJ1x02'),
+    );
+
+    $form['max_payu_salt'] = array(
+      '#type' => 'textfield',
+      '#title' => t('PayU Salt for less than or equal to 1k'),
+      '#size' => 25,
+      '#maxlength' => 25,
+      '#default_value' => variable_get('max_payu_salt', '4T8BKeb0'),
+    );
+
+    $form['max_payu_salt_greater_1k'] = array(
+      '#type' => 'textfield',
+      '#title' => t('PayU Salt for greater than 1k'),
+      '#size' => 25,
+      '#maxlength' => 25,
+      '#default_value' => variable_get('max_payu_salt_greater_1k', 'gatRa450'),
+    );
+
+    $form['max_payu_productinfo'] = array(
+      '#type' => 'textfield',
+      '#title' => t('PayU Product Info'),
+      '#size' => 25,
+      '#maxlength' => 25,
+      '#default_value' => variable_get('max_payu_productinfo', 'maxprodpayu'),
+    );
+
+    // Pass the form array through system_settings_form()
+    return system_settings_form($form);
+  }
+
+}
+
+
+/**
+ * Max payu submission menu callback.
+ */
+function max_payu_submission($form, &$form_state) {
+
+  if (isset($_SESSION['max_payu_params']) && !empty($_SESSION['max_payu_params'])) {
+
+    $params = $_SESSION['max_payu_params'];
+
+    foreach ($params as $key => $value) {
+      $form[$key] = array(
+        '#type' => 'hidden',
+        '#value' => t($value),
+      );
+    }
+
+    $form['#action'] = url("https://secure.payu.in/_payment");
+
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => t('Submit'),
+    );
+
+    return $form;
   }
 }
