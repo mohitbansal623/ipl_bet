@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Payu Transaction Details feature.
+ */
+
+include_once 'payu_transaction_details.features.inc';

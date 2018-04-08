@@ -16,7 +16,7 @@ function betting_module_menu() {
     'title' => 'Pay Form',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('pay_form'),
-    'access callback' => TRUE,
+    'access callback' => 'check_access',
   );
 
   return $items;

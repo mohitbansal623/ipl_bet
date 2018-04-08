@@ -14,7 +14,7 @@ function ipl_custom_menu() {
   $items['payment-form'] = array(
     'page callback' => 'payment_gateway',
     'type' => MENU_CALLBACK,
-    'access callback' => TRUE,
+    'access callback' => array('check_access_user'),
   );
 
   $items['admin/config/match-results'] = array(
@@ -45,7 +45,7 @@ function ipl_custom_menu() {
     'title' => 'Pay Online',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('max_payu_submission'),
-    'access callback' => TRUE,
+    'access callback' => array('check_access_user'),
   );
 
   return $items;
@@ -63,6 +63,13 @@ function check_role() {
   return FALSE;
 }
 
+function check_access_user() {
+  if (user_is_logged_in()) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
 
 function custom_match_configuration($form, &$form_state) {
   $form['match_results'] = array(
