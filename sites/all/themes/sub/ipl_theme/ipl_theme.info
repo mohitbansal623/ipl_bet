@@ -31,4 +31,4 @@ regions[page_bottom]    = 'Page bottom'
 ;; Javascript
 ;;;;;;;;;;;;;;;;;;;;;
 ;scripts[] = js/jquery.matchHeight.js
-;scripts[] = js/general.js
+scripts[] = js/general.js
