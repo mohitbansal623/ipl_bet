@@ -182,7 +182,7 @@ function payment_form($form, &$form_state) {
 
   drupal_add_js(drupal_get_path('module', 'ipl_custom') .'/ipl_form.js', 'file');
 
-  if (!isset($form_state['payu_param_status']) && !$form_state['payu_param_status']) {
+  if (!isset($form_state['payu_param_status'])) {
 
     $form['max_payu_user_name'] = array(
     '#title' => 'Full Name',
@@ -285,12 +285,12 @@ function payment_form_submit($form, &$form_state) {
   $amount = number_format((float)$amount, 2, '.', '');
 
   if ($amount <= 1000) {
-    $salt = variable_get('max_payu_salt', '4T8BKeb0');
-    $merchant_key = variable_get('max_payu_merchant_key', 'sUccSb');
+    $salt = variable_get('max_payu_salt', 'eCwWELxi');
+    $merchant_key = variable_get('max_payu_merchant_key', 'gtKFFx');
   }
   else {
-    $salt = variable_get('max_payu_salt_greater_1k', 'gatRa450');
-    $merchant_key = variable_get('max_payu_merchant_key_greater_1k', 'OJ1x02');
+    $salt = variable_get('max_payu_salt_greater_1k', 'eCwWELxi');
+    $merchant_key = variable_get('max_payu_merchant_key_greater_1k', 'gtKFFx');
   }
   $txnid = max_payu_get_unique_transaction_id();
   $productinfo = variable_get('max_payu_productinfo', 'maxprodpayu');
@@ -350,15 +350,15 @@ function max_payu_payment_status() {
     if (!empty($transaction_details)) {
 
       /***********************************/
-      $user_details = $_SESSION['max_user_details'];
+      // $user_details = $_SESSION['max_user_details'];
 
-      $max_id = $user_details["max_id"];
-      $max_id_data = explode('.', $max_id);
+      // $max_id = $user_details["max_id"];
+      // $max_id_data = explode('.', $max_id);
 
       $options['Ipid'] = isset($user_details["ipid"]) ? $user_details["ipid"] : '';
       $transaction_details['ip_id'] = $options['Ipid'];
 
-      $options['registrationno'] = !empty($max_id_data) ? (int)$max_id_data[1] : '';
+      $options['registrationno'] = '';
       $transaction_details['registration_no'] = $options['registrationno'];
 
       $options['amount'] = isset($_POST['amount']) ? (int)$_POST['amount'] : '';
@@ -397,7 +397,7 @@ function max_payu_payment_status() {
       // $txn = $options['TransactionId'];
       // $options["TransactionId"] = isset($_POST["mihpayid"]) ? $_POST["mihpayid"] : '';
       // $receipt_no = max_payu_deposit_detail_on_maxserver($options);
-      $output = '<div id="payment-status-message"><p class="thank-you">THANK YOU</p><p class="status-message">Your online transaction with Maxhealthcare has been successful.</p>';
+      $output = '<div id="payment-status-message"><p class="thank-you">THANK YOU</p><p class="status-message">Your online transaction has been successful.</p>';
       // if(!is_null($receipt_no)) {
 
       //   try {
@@ -419,7 +419,7 @@ function max_payu_payment_status() {
       return $output;
     }
     else {
-      $output = '<div id="payment-status-message"><p class="thank-you">OOPS!</p><p class="status-message">Transaction failed! <a href="/pay-online">Try Again</a></p></div>';
+      $output = '<div id="payment-status-message"><p class="thank-you">OOPS!</p><p class="status-message">Transaction failed! <a href="/payment-form">Try Again</a></p></div>';
       return $output;
     }
   }
@@ -514,7 +514,7 @@ function max_payu_create_transaction_id() {
 function max_payu_insert_transaction_details($transaction_details = array()) {
   if (!empty($transaction_details)) {
     $transaction_id = $transaction_details['transaction_id'];
-    $max_id = $transaction_details['max_id'];
+    $max_id = '';
     $amount = $transaction_details['amount'];
     $status = $transaction_details['status'];
     $date = $transaction_details['added_on'];

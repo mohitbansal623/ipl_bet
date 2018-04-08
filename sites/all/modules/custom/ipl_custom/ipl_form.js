@@ -4,7 +4,7 @@
   Drupal.behaviors.ipl_form = {
     attach: function (context, settings) {
       $(window).load(function(){
-        $('#max-payu-paid-amount button.redirect_to_submission').click();
+        $('#payment-form .redirect_to_submission').click();
       });
     }
   }
