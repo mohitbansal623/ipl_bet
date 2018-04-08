@@ -27,7 +27,7 @@ function check_access() {
     return TRUE;
   }
 
-  return FALSE;
+  drupal_goto('/user/login');
 }
 
 function bet_form() {

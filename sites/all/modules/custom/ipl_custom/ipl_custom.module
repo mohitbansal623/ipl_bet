@@ -440,7 +440,7 @@ function check_betting_time($nid) {
 
   if (isset($node->field_betting_time['und'][0]['value']) && !empty($node->field_betting_time['und'][0]['value'])) {
     $betting_time = $node->field_betting_time['und'][0]['value'];
-    $betting_time = strtotime($betting_time);
+    $betting_time = strtotime('+5 hour +30 minutes',strtotime($betting_time));
     $current_time = REQUEST_TIME;
 
     if ($current_time < $betting_time) {
