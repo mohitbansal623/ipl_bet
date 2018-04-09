@@ -612,7 +612,7 @@ function max_payu_admin_settings($form, &$form_state) {
       '#title' => t('PayU Merchant Key for less than or equal to 1k'),
       '#size' => 25,
       '#maxlength' => 25,
-      '#default_value' => variable_get('max_payu_merchant_key', 'sUccSb'),
+      '#default_value' => variable_get('max_payu_merchant_key', 'gtKFFx'),
     );
 
     $form['max_payu_merchant_key_greater_1k'] = array(
@@ -620,7 +620,7 @@ function max_payu_admin_settings($form, &$form_state) {
       '#title' => t('PayU Merchant Key for greater than 1k'),
       '#size' => 25,
       '#maxlength' => 25,
-      '#default_value' => variable_get('max_payu_merchant_key_greater_1k', 'OJ1x02'),
+      '#default_value' => variable_get('max_payu_merchant_key_greater_1k', 'gtKFFx'),
     );
 
     $form['max_payu_salt'] = array(
@@ -628,7 +628,7 @@ function max_payu_admin_settings($form, &$form_state) {
       '#title' => t('PayU Salt for less than or equal to 1k'),
       '#size' => 25,
       '#maxlength' => 25,
-      '#default_value' => variable_get('max_payu_salt', '4T8BKeb0'),
+      '#default_value' => variable_get('max_payu_salt', 'eCwWELxi'),
     );
 
     $form['max_payu_salt_greater_1k'] = array(
@@ -636,7 +636,7 @@ function max_payu_admin_settings($form, &$form_state) {
       '#title' => t('PayU Salt for greater than 1k'),
       '#size' => 25,
       '#maxlength' => 25,
-      '#default_value' => variable_get('max_payu_salt_greater_1k', 'gatRa450'),
+      '#default_value' => variable_get('max_payu_salt_greater_1k', 'eCwWELxi'),
     );
 
     $form['max_payu_productinfo'] = array(
