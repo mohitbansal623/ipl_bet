@@ -115,3 +115,48 @@
     color: #fff;
     justify-content: center;
 }
+
+
+/*Betting form-08-04-18*/
+.navbar.container {background: rgba(0, 0, 0, 0.6);}
+#betting-form>div{
+    display: flex;
+    flex-wrap:wrap;
+    margin: 0 -10px;
+}
+#betting-form fieldset.panel-default{
+    width: calc(33.33% - 20px);
+    margin: 10px;
+    border-radius: 0;
+}
+.panel-title{font-weight: bold;}
+#betting-form .form-radios .form-type-radio {
+    margin-bottom: 10px;
+}
+.page-user-login section.col-sm-12 {
+    max-width: 50%;
+    margin: 0 auto;
+    float: none;
+}
+.page-user section.col-sm-12{
+    max-width: 50%;
+    margin: 0 auto;
+    float: none;
+}
+.admin-menu section.col-sm-12{max-width: 100%;float: left;}
+.page-payment-form #payment-form{
+  max-width: 50%;
+    margin: 0 auto;
+    float: none;
+}
+.button.default {
+    border: 2px solid;
+    border-radius: 0;
+}
+.no-sidebars .form-control{border-radius: 0;box-shadow: none;}
+.no-sidebars .btn{border-radius: 0;}
+.btn.btn-default:hover, .btn.btn-default:focus, .btn.btn-default:active{
+    background: #f2c900;
+    color: #fff;
+    border-color: #f2c900;
+}

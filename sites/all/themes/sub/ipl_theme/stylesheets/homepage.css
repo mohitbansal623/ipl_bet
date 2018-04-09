@@ -158,3 +158,84 @@
   color: #fff;
   justify-content: center;
 }
+
+/*Betting form-08-04-18*/
+/* line 121, ../sass/homepage.scss */
+.navbar.container {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* line 122, ../sass/homepage.scss */
+#betting-form > div {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10px;
+}
+
+/* line 127, ../sass/homepage.scss */
+#betting-form fieldset.panel-default {
+  width: calc(33.33% - 20px);
+  margin: 10px;
+  border-radius: 0;
+}
+
+/* line 132, ../sass/homepage.scss */
+.panel-title {
+  font-weight: bold;
+}
+
+/* line 133, ../sass/homepage.scss */
+#betting-form .form-radios .form-type-radio {
+  margin-bottom: 10px;
+}
+
+/* line 136, ../sass/homepage.scss */
+.page-user-login section.col-sm-12 {
+  max-width: 50%;
+  margin: 0 auto;
+  float: none;
+}
+
+/* line 141, ../sass/homepage.scss */
+.page-user section.col-sm-12 {
+  max-width: 50%;
+  margin: 0 auto;
+  float: none;
+}
+
+/* line 146, ../sass/homepage.scss */
+.admin-menu section.col-sm-12 {
+  max-width: 100%;
+  float: left;
+}
+
+/* line 147, ../sass/homepage.scss */
+.page-payment-form #payment-form {
+  max-width: 50%;
+  margin: 0 auto;
+  float: none;
+}
+
+/* line 152, ../sass/homepage.scss */
+.button.default {
+  border: 2px solid;
+  border-radius: 0;
+}
+
+/* line 156, ../sass/homepage.scss */
+.no-sidebars .form-control {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* line 157, ../sass/homepage.scss */
+.no-sidebars .btn {
+  border-radius: 0;
+}
+
+/* line 158, ../sass/homepage.scss */
+.btn.btn-default:hover, .btn.btn-default:focus, .btn.btn-default:active {
+  background: #f2c900;
+  color: #fff;
+  border-color: #f2c900;
+}
