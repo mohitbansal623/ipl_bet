@@ -1,8 +1,10 @@
 name = Matches View
 core = 7.x
 package = Features
+dependencies[] = image
 dependencies[] = views
 features[ctools][] = views:views_default:3.0
 features[features_api][] = api:2
+features[image][] = ipl_logos
 features[views_view][] = list_of_matches
 features_exclude[dependencies][ctools] = ctools
