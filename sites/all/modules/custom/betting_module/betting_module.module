@@ -1,5 +1,5 @@
 <?php
-
+$_SESSION['nid'] = 2;
 /**
  * Implements hook_menu()
  */
