@@ -86,6 +86,7 @@ function betting_form($form, &$form_state) {
   $form['match_winner']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
+    '#required' => TRUE,
   );
 
   $form['match_winner']['submit'] = array(
@@ -178,7 +179,6 @@ function save_highest_wicket_fall($form, &$form_state) {
   $uid = $user->uid;
   $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
   $form_id = isset($form_state['complete form']['highest_wicket_fall']['form_id']['#value']) ? $form_state['complete form']['highest_wicket_fall']['form_id']['#value']: NULL;
-  dpm($form_id);
   $option = isset($form_state['complete form']['highest_wicket_fall']['options']['#value'])? $form_state['complete form']['highest_wicket_fall']['options']['#value']: NULL;
 
   check_and_update_data($uid, $nid, $form_id, $option);
@@ -412,6 +412,7 @@ function betting_form2($form, &$form_state) {
   $form['match_toss']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
+    '#required' => TRUE,
   );
 
   $form['match_toss']['submit'] = array(
@@ -462,6 +463,7 @@ function betting_form3($form, &$form_state) {
   $form['match_powerplay_runs']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
+    '#required' => TRUE,
   );
 
    $form['match_powerplay_runs']['submit'] = array(
@@ -511,6 +513,7 @@ function betting_form4($form, &$form_state) {
   $form['highest_wicket_fall']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
+    '#required' => TRUE,
   );
 
   $form['highest_wicket_fall']['submit'] = array(
@@ -560,6 +563,7 @@ function betting_form5($form, &$form_state) {
   $form['highest_fours_match']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
+    '#required' => TRUE,
   );
 
   $form['highest_fours_match']['submit'] = array(
@@ -608,6 +612,7 @@ function betting_form6($form, &$form_state) {
   $form['highest_six_match']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
+    '#required' => TRUE,
   );
 
   $form['highest_six_match']['submit'] = array(
@@ -658,6 +663,7 @@ function betting_form7($form, &$form_state) {
   $form['extra_runs_given']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
+    '#required' => TRUE,
   );
 
   $form['extra_runs_given']['submit'] = array(
@@ -708,6 +714,7 @@ function betting_form8($form, &$form_state) {
   $form['top_batsman_match']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
+    '#required' => TRUE,
   );
 
   $form['top_batsman_match']['submit'] = array(
@@ -757,6 +764,7 @@ function betting_form9($form, &$form_state) {
   $form['top_bowler_match']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
+    '#required' => TRUE,
   );
 
   $form['top_bowler_match']['submit'] = array(
@@ -806,6 +814,7 @@ function betting_form10($form, &$form_state) {
   $form['highest_partnership']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
+    '#required' => TRUE,
   );
 
   $form['highest_partnership']['submit'] = array(
@@ -855,6 +864,7 @@ function betting_form11($form, &$form_state) {
   $form['highest_catch_without_keeper']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
+    '#required' => TRUE,
   );
 
   $form['highest_catch_without_keeper']['submit'] = array(
@@ -904,6 +914,7 @@ function betting_form12($form, &$form_state) {
   $form['highest_dismissal_keeper']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
+    '#required' => TRUE,
   );
 
   $form['highest_dismissal_keeper']['submit'] = array(
@@ -952,6 +963,7 @@ function betting_form13($form, &$form_state) {
   $form['player_score_50']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
+    '#required' => TRUE,
   );
 
   $form['player_score_50']['submit'] = array(
@@ -1000,6 +1012,7 @@ function betting_form14($form, &$form_state) {
   $form['highest_poweplay_4s']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
+    '#required' => TRUE,
   );
 
   $form['highest_poweplay_4s']['submit'] = array(
