@@ -137,7 +137,7 @@ function matches_view_views_default_views() {
   $handler->display->display_options['fields']['field_team_a_icon']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_team_a_icon']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_team_a_icon']['settings'] = array(
-    'image_style' => 'medium',
+    'image_style' => 'ipl_logos',
     'image_link' => '',
   );
   /* Field: Content: Team B */
@@ -154,7 +154,7 @@ function matches_view_views_default_views() {
   $handler->display->display_options['fields']['field_team_b_icon']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_team_b_icon']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_team_b_icon']['settings'] = array(
-    'image_style' => 'medium',
+    'image_style' => 'ipl_logos',
     'image_link' => '',
   );
   /* Field: Content: Match Date */
@@ -240,7 +240,7 @@ function matches_view_views_default_views() {
   $handler->display->display_options['fields']['field_team_a_icon']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_team_a_icon']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_team_a_icon']['settings'] = array(
-    'image_style' => 'medium',
+    'image_style' => 'ipl_logos',
     'image_link' => '',
   );
   /* Field: Content: Team B */
@@ -257,7 +257,7 @@ function matches_view_views_default_views() {
   $handler->display->display_options['fields']['field_team_b_icon']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_team_b_icon']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_team_b_icon']['settings'] = array(
-    'image_style' => 'medium',
+    'image_style' => 'ipl_logos',
     'image_link' => '',
   );
   /* Field: Content: Match Date */
@@ -286,7 +286,7 @@ function matches_view_views_default_views() {
 $result = check_betting_time($row->nid);
 if ($result) {
 $_SESSION[\'nid\'] = $row->nid;
-echo "<a href=\'/betting-form\'> Bet Now";
+echo "<a href=\'/betting-form\' class=\'btn btn-default\'> Bet Now</a>";
 }
 
 ?>';
@@ -394,7 +394,7 @@ echo "<a href=\'/betting-form\'> Bet Now";
   $handler->display->display_options['fields']['field_team_a_icon']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_team_a_icon']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_team_a_icon']['settings'] = array(
-    'image_style' => 'medium',
+    'image_style' => 'ipl_logos',
     'image_link' => '',
   );
   /* Field: Content: Team B */
@@ -411,7 +411,7 @@ echo "<a href=\'/betting-form\'> Bet Now";
   $handler->display->display_options['fields']['field_team_b_icon']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['field_team_b_icon']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_team_b_icon']['settings'] = array(
-    'image_style' => 'medium',
+    'image_style' => 'ipl_logos',
     'image_link' => '',
   );
   /* Field: Content: Match Date */
