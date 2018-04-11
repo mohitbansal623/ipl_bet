@@ -151,6 +151,8 @@ function ads_views_default_views() {
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
+  $handler->display->display_options['defaults']['use_ajax'] = FALSE;
+  $handler->display->display_options['use_ajax'] = TRUE;
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
@@ -226,6 +228,10 @@ function ads_views_default_views() {
 
   /* Display: Block */
   $handler = $view->new_display('block', 'Block', 'block');
+  $handler->display->display_options['defaults']['use_ajax'] = FALSE;
+  $handler->display->display_options['use_ajax'] = TRUE;
+  $handler->display->display_options['defaults']['exposed_form'] = FALSE;
+  $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['defaults']['pager'] = FALSE;
   $handler->display->display_options['pager']['type'] = 'some';
   $handler->display->display_options['pager']['options']['items_per_page'] = '5';
@@ -235,6 +241,61 @@ function ads_views_default_views() {
   $handler->display->display_options['defaults']['row_plugin'] = FALSE;
   $handler->display->display_options['row_plugin'] = 'fields';
   $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['alter']['alter_text'] = TRUE;
+  $handler->display->display_options['fields']['title']['alter']['text'] = 'All advertisements';
+  $handler->display->display_options['fields']['title']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['title']['alter']['path'] = 'advertisements';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
+  /* Field: Content: Shop Photos */
+  $handler->display->display_options['fields']['field_shop_photos']['id'] = 'field_shop_photos';
+  $handler->display->display_options['fields']['field_shop_photos']['table'] = 'field_data_field_shop_photos';
+  $handler->display->display_options['fields']['field_shop_photos']['field'] = 'field_shop_photos';
+  $handler->display->display_options['fields']['field_shop_photos']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_shop_photos']['click_sort_column'] = 'fid';
+  $handler->display->display_options['fields']['field_shop_photos']['settings'] = array(
+    'image_style' => '',
+    'image_link' => '',
+  );
+  $handler->display->display_options['fields']['field_shop_photos']['delta_offset'] = '0';
+  /* Field: Content: Shop Items */
+  $handler->display->display_options['fields']['field_shop_items']['id'] = 'field_shop_items';
+  $handler->display->display_options['fields']['field_shop_items']['table'] = 'field_data_field_shop_items';
+  $handler->display->display_options['fields']['field_shop_items']['field'] = 'field_shop_items';
+  $handler->display->display_options['fields']['field_shop_items']['exclude'] = TRUE;
+  /* Field: Content: Shop Address */
+  $handler->display->display_options['fields']['field_shop_address']['id'] = 'field_shop_address';
+  $handler->display->display_options['fields']['field_shop_address']['table'] = 'field_data_field_shop_address';
+  $handler->display->display_options['fields']['field_shop_address']['field'] = 'field_shop_address';
+  $handler->display->display_options['fields']['field_shop_address']['exclude'] = TRUE;
+  /* Field: Content: Shop City */
+  $handler->display->display_options['fields']['field_shop_city']['id'] = 'field_shop_city';
+  $handler->display->display_options['fields']['field_shop_city']['table'] = 'field_data_field_shop_city';
+  $handler->display->display_options['fields']['field_shop_city']['field'] = 'field_shop_city';
+  $handler->display->display_options['fields']['field_shop_city']['exclude'] = TRUE;
+  /* Field: Content: Shop State */
+  $handler->display->display_options['fields']['field_shop_state']['id'] = 'field_shop_state';
+  $handler->display->display_options['fields']['field_shop_state']['table'] = 'field_data_field_shop_state';
+  $handler->display->display_options['fields']['field_shop_state']['field'] = 'field_shop_state';
+  $handler->display->display_options['fields']['field_shop_state']['exclude'] = TRUE;
+  /* Field: Content: Shop Pin Code */
+  $handler->display->display_options['fields']['field_shop_pin_code']['id'] = 'field_shop_pin_code';
+  $handler->display->display_options['fields']['field_shop_pin_code']['table'] = 'field_data_field_shop_pin_code';
+  $handler->display->display_options['fields']['field_shop_pin_code']['field'] = 'field_shop_pin_code';
+  $handler->display->display_options['fields']['field_shop_pin_code']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_shop_pin_code']['settings'] = array(
+    'thousand_separator' => '',
+    'prefix_suffix' => 1,
+  );
+  $handler->display->display_options['block_description'] = 'Ads Block';
   $export['advertisements'] = $view;
 
   return $export;

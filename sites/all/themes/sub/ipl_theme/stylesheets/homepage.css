@@ -281,11 +281,11 @@
   border-left: 5px solid #FDB913;
 }
 /*10-04-18*/
-.block.block-system {
+.page-betting-form .block.block-system {
     display: flex;
     flex-wrap: wrap;
 }
-.block.block-system form {
+.page-betting-form .block.block-system form {
     width: calc(33.33% - 20px);
     margin: 10px;
     border-radius: 0;
@@ -295,7 +295,7 @@
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
     box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
 }
-.block.block-system form  fieldset.panel-default{
+.page-betting-form .block.block-system form  fieldset.panel-default{
     margin: 0;
     background-color: #fff;
     border: 0;
@@ -303,9 +303,9 @@
     -webkit-box-shadow: none;
     box-shadow: none;
 }
-.block.block-system form fieldset .panel-heading{border:none;text-transform: uppercase;border-bottom: 1px solid #c2b9e4;}
-.block.block-system form fieldset .panel-heading .panel-title{font-size: 14px;color: #50457b;}
-.block.block-system form .form-radios .form-type-radio {margin-bottom: 10px;}
+.page-betting-form .block.block-system form fieldset .panel-heading{border:none;text-transform: uppercase;border-bottom: 1px solid #c2b9e4;}
+.page-betting-form .block.block-system form fieldset .panel-heading .panel-title{font-size: 14px;color: #50457b;}
+.page-betting-form .block.block-system form .form-radios .form-type-radio {margin-bottom: 10px;}
 .page-header{
   font-size: 20px;
   text-transform: uppercase;
@@ -317,7 +317,7 @@ header#navbar.navbar.container {
     max-width: 100%;
 }
 .main-container{padding-top: 90px;}
-.block.block-system .view-list-of-matches{width:100%;}
+.page-betting-form .block.block-system .view-list-of-matches{width:100%;}
 .page-user-login .block.block-system form, .page-user-register .block.block-system form, .page-user-password .block.block-system form, .not-logged-in .block.block-system form{
   box-shadow: 0 3px 9px rgba(0, 0, 0, .07);
     width: 100%;
@@ -330,4 +330,52 @@ header#navbar.navbar.container {
 } 
 .logo img{max-height: 60px; border-radius: 100px;}
 nav, .name.navbar-brand{margin-top: 15px;font-family: normalfont;}
-body{font-family: normalfont;}
+body,html{font-family: normalfont;height:100%;}
+.view.view-advertisements.view-id-advertisements.view-display-id-block {
+    position: absolute;
+    z-index: 9;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    padding: 15px;
+}
+.views-exposed-widgets {
+    margin-bottom: .5em;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+}
+.views-exposed-form label {
+    font-weight: bold;
+    font-size: 13px;
+}
+.views-exposed-widgets .form-control {
+    height: 25px;
+    padding: 5px;
+}
+.views-exposed-widgets .views-exposed-form .views-exposed-widget .btn {
+    margin-top: .8em;
+}
+.views-field.views-field-title a {
+    text-transform: uppercase;
+    font-family: boldfont;
+    font-size: 12px;
+}
+@media only screen and (max-width:990px){
+  .page-user section.col-sm-12 {max-width: 100%;}
+}
+@media only screen and (max-width:768px){
+  .page-betting-form .block.block-system form {width: 100%;}
+  .main-container{padding-bottom: 40px;}
+  .admin-menu section.col-sm-12 {width: 100%;}
+  .page-payment-form #payment-form {max-width: 100%;}
+  .navbar-default .navbar-toggle{margin-top: 20px;}
+  .page-container.fixed-page {position: relative;}
+  .view.view-advertisements.view-id-advertisements.view-display-id-block {
+    width: 100%;
+    position: relative;
+    }
+}
+
+
+

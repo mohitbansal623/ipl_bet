@@ -190,6 +190,8 @@ global $user;
   </div>
 </div>
 
+<?php $output = views_embed_view('advertisements', 'block'); print $output; ?>
+
 <?php if (!empty($page['footer'])): ?>
   <div class="site-footer">
     <footer class="footer <?php print $container_class; ?>">
