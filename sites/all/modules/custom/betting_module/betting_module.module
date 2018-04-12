@@ -37,13 +37,12 @@ function bet_form() {
   $renderable_form[4] =  drupal_get_form('betting_form5');
   $renderable_form[5] =  drupal_get_form('betting_form6');
   $renderable_form[6] =  drupal_get_form('betting_form7');
-  $renderable_form[7] =  drupal_get_form('betting_form7');
-  $renderable_form[8] =  drupal_get_form('betting_form8');
-  $renderable_form[9] =  drupal_get_form('betting_form9');
-  $renderable_form[10] = drupal_get_form('betting_form10');
-  $renderable_form[11] = drupal_get_form('betting_form11');
-  $renderable_form[12] = drupal_get_form('betting_form12');
-  $renderable_form[13] = drupal_get_form('betting_form13');
+  $renderable_form[7] =  drupal_get_form('betting_form8');
+  $renderable_form[8] =  drupal_get_form('betting_form9');
+  $renderable_form[9] =  drupal_get_form('betting_form10');
+  $renderable_form[10] = drupal_get_form('betting_form11');
+  $renderable_form[11] = drupal_get_form('betting_form12');
+  $renderable_form[12] = drupal_get_form('betting_form13');
 
 
   return $renderable_form;

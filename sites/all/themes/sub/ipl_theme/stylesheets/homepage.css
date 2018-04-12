@@ -1,5 +1,24 @@
+@font-face {
+  font-family: normalfont;
+  src: url("../fonts/Gotham-Book.eot?#iefix") format("embedded-opentype"), url("../fonts/Gotham-Book.otf") format("opentype"), url("../fonts/Gotham-Book.woff") format("woff"), url("../fonts/Gotham-Book.ttf") format("truetype"), url("../fonts/Gotham-Book.svg#Gotham-Book") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: boldfont;
+  src: url("../fonts/Gotham-Bold.eot?#iefix") format("embedded-opentype"), url("../fonts/Gotham-Bold.otf") format("opentype"), url("../fonts/Gotham-Bold.woff") format("woff"), url("../fonts/Gotham-Bold.ttf") format("truetype"), url("../fonts/Gotham-Bold.svg#Gotham-Bold") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: demifont;
+  src: url("../fonts/Gotham-Medium.eot?#iefix") format("embedded-opentype"), url("../fonts/Gotham-Medium.otf") format("opentype"), url("../fonts/Gotham-Medium.woff") format("woff"), url("../fonts/Gotham-Medium.ttf") format("truetype"), url("../fonts/Gotham-Medium.svg#Gotham-Medium") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
 /* ---- particles.js container ---- */
 /* line 2, ../sass/homepage.scss */
+/* line 21, ../sass/homepage.scss */
 .navbar.container {
   background: transparent;
   width: 100%;
@@ -10,6 +29,7 @@
 }
 
 /* line 10, ../sass/homepage.scss */
+/* line 31, ../sass/homepage.scss */
 #navbar.navbar-default .navbar-nav > li > a {
   color: #fff;
   text-transform: uppercase;
@@ -17,17 +37,20 @@
 }
 
 /* line 11, ../sass/homepage.scss */
+/* line 38, ../sass/homepage.scss */
 #navbar.navbar-default .navbar-nav > .active > a, #navbar#navbar.navbar-default .navbar-nav > .active > a:hover, #navbar.navbar-default .navbar-nav > .active > a:focus {
   background: transparent;
   color: #f2c900;
 }
 
 /* line 15, ../sass/homepage.scss */
+/* line 44, ../sass/homepage.scss */
 #navbar.navbar-default .navbar-nav > li > a:hover {
   color: #f2c900;
 }
 
 /* line 16, ../sass/homepage.scss */
+/* line 49, ../sass/homepage.scss */
 #navbar .name.navbar-brand {
   color: white;
   text-transform: uppercase;
@@ -35,6 +58,7 @@
 }
 
 /* line 20, ../sass/homepage.scss */
+/* line 56, ../sass/homepage.scss */
 #particles-js {
   width: 100%;
   height: 100%;
@@ -48,6 +72,7 @@
 }
 
 /* line 31, ../sass/homepage.scss */
+/* line 69, ../sass/homepage.scss */
 .page-container.fixed-page {
   position: fixed;
   width: 100%;
@@ -56,6 +81,7 @@
 }
 
 /* line 37, ../sass/homepage.scss */
+/* line 77, ../sass/homepage.scss */
 .page-container.fixed-page > .banner {
   background: url("ipl10.jpg");
   background-size: cover;
@@ -67,6 +93,7 @@
 }
 
 /* line 46, ../sass/homepage.scss */
+/* line 88, ../sass/homepage.scss */
 .page-container.fixed-page > .banner:after {
   content: '';
   position: absolute;
@@ -78,12 +105,15 @@
 }
 
 /* line 55, ../sass/homepage.scss */
+/* line 99, ../sass/homepage.scss */
 .button.default {
   background: #f2c900;
   color: #fff;
+  border-color: #f2c900;
 }
 
 /* line 59, ../sass/homepage.scss */
+/* line 106, ../sass/homepage.scss */
 .button {
   position: relative;
   display: inline-block;
@@ -97,9 +127,11 @@
   z-index: 1;
   border: 2px solid transparent;
   text-decoration: none;
+  font-family: demifont;
 }
 
 /* line 73, ../sass/homepage.scss */
+/* line 123, ../sass/homepage.scss */
 .button.default:hover, .button.default:focus {
   background: transparent;
   border: 2px solid #f2c900;
@@ -108,12 +140,14 @@
 }
 
 /* line 79, ../sass/homepage.scss */
+/* line 131, ../sass/homepage.scss */
 .button.whitehole {
   border: 2px solid #fff;
   color: #fff;
 }
 
 /* line 83, ../sass/homepage.scss */
+/* line 137, ../sass/homepage.scss */
 .button.whitehole:hover, .button.whitehole:focus {
   background: #fff;
   color: #414141;
@@ -121,31 +155,37 @@
 }
 
 /* line 88, ../sass/homepage.scss */
+/* line 144, ../sass/homepage.scss */
 .button.whitehole {
   border: 2px solid #fff;
   color: #fff;
 }
 
 /* line 93, ../sass/homepage.scss */
+/* line 150, ../sass/homepage.scss */
 .button.whitehole:hover, .button.whitehole:focus {
   background: #fff;
   color: #414141;
 }
 
 /* line 97, ../sass/homepage.scss */
+/* line 156, ../sass/homepage.scss */
 .banner-content {
   position: relative;
   z-index: 1;
 }
 
 /* line 101, ../sass/homepage.scss */
+/* line 162, ../sass/homepage.scss */
 .banner-content h2 {
   font-size: 4rem;
   text-transform: uppercase;
   margin-bottom: 50px;
+  font-family: boldfont;
 }
 
 /* line 106, ../sass/homepage.scss */
+/* line 170, ../sass/homepage.scss */
 .banner-block {
   margin-top: 100px;
   margin: 0 auto;
@@ -161,22 +201,26 @@
 
 /*Betting form-08-04-18*/
 /* line 121, ../sass/homepage.scss */
+/* line 185, ../sass/homepage.scss */
 .navbar.container {
   background: rgba(0, 0, 0, 0.8);
   border-radius: 0;
 }
 
 /* line 122, ../sass/homepage.scss */
+/* line 191, ../sass/homepage.scss */
 .panel-title {
   font-weight: bold;
 }
 
 /* line 123, ../sass/homepage.scss */
+/* line 196, ../sass/homepage.scss */
 #betting-form .form-radios .form-type-radio {
   margin-bottom: 10px;
 }
 
 /* line 126, ../sass/homepage.scss */
+/* line 201, ../sass/homepage.scss */
 .page-user-login section.col-sm-12 {
   max-width: 50%;
   margin: 0 auto;
@@ -184,6 +228,7 @@
 }
 
 /* line 131, ../sass/homepage.scss */
+/* line 208, ../sass/homepage.scss */
 .page-user section.col-sm-12 {
   max-width: 50%;
   margin: 0 auto;
@@ -191,39 +236,46 @@
 }
 
 /* line 136, ../sass/homepage.scss */
+/* line 215, ../sass/homepage.scss */
 .admin-menu section.col-sm-12 {
   max-width: 100%;
   float: left;
 }
 
 /* line 137, ../sass/homepage.scss */
+/* line 221, ../sass/homepage.scss */
 .page-payment-form #payment-form {
-    max-width: 40%;
-    margin: 0 auto;
-    float: none;
-    width: 100%;
-    padding: 20px;
-    box-shadow: 0 3px 9px rgba(0, 0, 0, .07);
+  max-width: 40%;
+  margin: 0 auto;
+  float: none;
+  width: 100%;
+  padding: 20px;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.07);
 }
 
 /* line 142, ../sass/homepage.scss */
+/* line 231, ../sass/homepage.scss */
 .button.default {
-  border: 2px solid;
+  border: 2px solid #f2c900;
   border-radius: 0;
 }
 
 /* line 146, ../sass/homepage.scss */
+/* line 237, ../sass/homepage.scss */
 .no-sidebars .form-control {
   border-radius: 0;
   box-shadow: none;
 }
 
 /* line 147, ../sass/homepage.scss */
+/* line 243, ../sass/homepage.scss */
 .no-sidebars .btn {
   border-radius: 0;
+  font-family: demifont;
 }
 
 /* line 148, ../sass/homepage.scss */
+/* line 249, ../sass/homepage.scss */
 .btn.btn-default:hover, .btn.btn-default:focus, .btn.btn-default:active {
   background: #f2c900;
   color: #fff;
@@ -232,6 +284,7 @@
 
 /*Matches*/
 /* line 156, ../sass/homepage.scss */
+/* line 257, ../sass/homepage.scss */
 .page-list-of-matches .page-header, .page-list-of-matches .block-title, .view-header h2 {
   font-size: 18px;
   text-transform: uppercase;
@@ -239,6 +292,7 @@
 }
 
 /* line 161, ../sass/homepage.scss */
+/* line 264, ../sass/homepage.scss */
 .page-list-of-matches .table-responsive .table-striped tbody {
   background: #fff;
   box-shadow: 2px 2px 1rem 1px rgba(120, 120, 120, 0.2);
@@ -248,63 +302,377 @@
 }
 
 /* line 168, ../sass/homepage.scss */
+/* line 273, ../sass/homepage.scss */
 .page-list-of-matches .table-responsive .table-striped tbody tr td {
   padding: 20px 10px;
   border: none;
   vertical-align: middle;
 }
 
+/* line 278, ../sass/homepage.scss */
+.page-list-of-matches .table-responsive .table-striped tbody tr td img {
+  max-width: none;
+}
+
 /* line 172, ../sass/homepage.scss */
+/* line 280, ../sass/homepage.scss */
 .page-list-of-matches .table-responsive .table-striped tbody tr td:first-child {
-  border-left: 10px solid #FDB913;
+  border-left: 5px solid #FDB913;
 }
+
 /*10-04-18*/
-.block.block-system {
-    display: flex;
-    flex-wrap: wrap;
+/* line 284, ../sass/homepage.scss */
+.page-betting-form .block.block-system {
+  display: flex;
+  flex-wrap: wrap;
 }
-.block.block-system form {
-    width: calc(33.33% - 20px);
-    margin: 10px;
-    border-radius: 0;
-    background-color: #fff;
-    border: 1px solid #eee;
-    border-radius: 4px;
-    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+
+/* line 288, ../sass/homepage.scss */
+.page-betting-form .block.block-system form {
+  width: calc(33.33% - 20px);
+  margin: 10px;
+  border-radius: 0;
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
-.block.block-system form  fieldset.panel-default{
-    margin: 0;
-    background-color: #fff;
-    border: 0;
-    border-radius: 0;
-    -webkit-box-shadow: none;
-    box-shadow: none;
+
+/* line 298, ../sass/homepage.scss */
+.page-betting-form .block.block-system form fieldset.panel-default {
+  margin: 0;
+  background-color: #fff;
+  border: 0;
+  border-radius: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
-.block.block-system form fieldset .panel-heading{border:none;text-transform: uppercase;border-bottom: 1px solid #c2b9e4;}
-.block.block-system form fieldset .panel-heading .panel-title{font-size: 14px;color: #50457b;}
-.block.block-system form .form-radios .form-type-radio {margin-bottom: 10px;}
-.page-header{
+
+/* line 306, ../sass/homepage.scss */
+.page-betting-form .block.block-system form fieldset .panel-heading {
+  border: none;
+  text-transform: uppercase;
+  border-bottom: 1px solid #c2b9e4;
+}
+
+/* line 307, ../sass/homepage.scss */
+.page-betting-form .block.block-system form fieldset .panel-heading .panel-title {
+  font-size: 14px;
+  color: #50457b;
+}
+
+/* line 308, ../sass/homepage.scss */
+.page-betting-form .block.block-system form .form-radios .form-type-radio {
+  margin-bottom: 10px;
+}
+
+/* line 309, ../sass/homepage.scss */
+.page-header {
   font-size: 20px;
   text-transform: uppercase;
   font-weight: bold;
 }
+
+/* line 314, ../sass/homepage.scss */
 header#navbar.navbar.container {
-    background: #000;
-    margin: 0;
-    max-width: 100%;
+  background: #000;
+  margin: 0;
+  max-width: 100%;
 }
-.main-container{padding-top: 40px;}
-.block.block-system .view-list-of-matches{width:100%;}
-.page-user-login .block.block-system form, .page-user-register .block.block-system form, .page-user-password .block.block-system form, .not-logged-in .block.block-system form{
-  box-shadow: 0 3px 9px rgba(0, 0, 0, .07);
-    width: 100%;
-    padding: 20px;
-    margin: 20px 0;
+
+/* line 319, ../sass/homepage.scss */
+.main-container {
+  padding-top: 90px;
+  padding-bottom: 40px;
 }
-.page-list-of-matches .table-responsive .table-striped tbody tr td:nth-child(3), .page-list-of-matches .table-responsive .table-striped tbody tr td:nth-child(5){
+
+/* line 320, ../sass/homepage.scss */
+.page-betting-form .block.block-system .view-list-of-matches {
+  width: 100%;
+}
+
+/* line 321, ../sass/homepage.scss */
+.page-user-login .block.block-system form, .page-user-register .block.block-system form, .page-user-password .block.block-system form, .not-logged-in .block.block-system form {
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.07);
+  width: 100%;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+/* line 327, ../sass/homepage.scss */
+.page-list-of-matches .table-responsive .table-striped tbody tr td:nth-child(3), .page-list-of-matches .table-responsive .table-striped tbody tr td:nth-child(5) {
   font-weight: bold;
   font-size: 16px;
 }
-.logo img{max-height: 60px; border-radius: 100px;}
-nav, .name.navbar-brand{margin-top: 15px;}
+
+/* line 331, ../sass/homepage.scss */
+.logo img {
+  max-height: 60px;
+  border-radius: 100px;
+}
+
+/* line 332, ../sass/homepage.scss */
+nav, .name.navbar-brand {
+  margin-top: 15px;
+  font-family: normalfont;
+}
+
+/* line 333, ../sass/homepage.scss */
+body, html {
+  font-family: normalfont;
+  height: 100%;
+}
+
+/* line 334, ../sass/homepage.scss */
+.view.view-advertisements.view-id-advertisements.view-display-id-block {
+  position: absolute;
+  z-index: 9;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  padding: 15px;
+}
+
+/* line 342, ../sass/homepage.scss */
+.views-exposed-widgets {
+  margin-bottom: .5em;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+/* line 348, ../sass/homepage.scss */
+.views-exposed-form label {
+  font-weight: bold;
+  font-size: 13px;
+}
+
+/* line 352, ../sass/homepage.scss */
+.views-exposed-widgets .form-control {
+  height: 25px;
+  padding: 5px;
+}
+
+/* line 356, ../sass/homepage.scss */
+.views-exposed-widgets .views-exposed-form .views-exposed-widget .btn {
+  margin-top: .8em;
+}
+
+/* line 359, ../sass/homepage.scss */
+.views-field.views-field-title a {
+  text-transform: uppercase;
+  font-family: boldfont;
+  font-size: 12px;
+}
+
+/* line 364, ../sass/homepage.scss */
+.page-advertisements .views-exposed-widgets {
+  margin-bottom: .5em;
+  display: flex;
+  flex-direction: row;
+  background: #fff;
+  align-items: flex-end;
+}
+
+/* line 371, ../sass/homepage.scss */
+.page-advertisements .views-exposed-form label {
+  font-weight: bold;
+  font-size: 13px;
+}
+
+/* line 375, ../sass/homepage.scss */
+.page-advertisements .views-exposed-widgets .form-control {
+  height: 25px;
+  padding: 5px;
+}
+
+/* line 379, ../sass/homepage.scss */
+.page-advertisements .views-exposed-form .views-exposed-widget .btn {
+  margin-top: .8em;
+  display: block;
+}
+
+/* line 383, ../sass/homepage.scss */
+.page-advertisements .table-responsive .table-striped tbody, .page-cart .table-responsive .table-striped tbody {
+  background: #fff;
+  box-shadow: 2px 2px 1rem 1px rgba(120, 120, 120, 0.2);
+  margin-bottom: 1rem;
+  border-radius: .5rem;
+  position: relative;
+}
+
+/* line 390, ../sass/homepage.scss */
+.page-advertisements .table-responsive .table-striped tbody tr td, .page-cart .table-responsive .table-striped tbody tr td {
+  padding: 20px 10px;
+  border: none;
+  vertical-align: middle;
+}
+
+/* line 395, ../sass/homepage.scss */
+.page-advertisements .table-responsive .table-striped tbody tr td img {
+  max-width: none;
+  max-height: 60px;
+  width: auto;
+}
+
+/* line 396, ../sass/homepage.scss */
+.page-advertisements .table-responsive .table-striped tbody tr td:first-child, .page-cart .table-responsive .table-striped tbody tr td:first-child {
+  border-left: 5px solid #FDB913;
+}
+
+/* line 397, ../sass/homepage.scss */
+.page-advertisements .table-responsive .table-striped tbody tr td:nth-child(3), .page-advertisements .table-responsive .table-striped tbody tr td:nth-child(5) {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* line 401, ../sass/homepage.scss */
+.page-betting-form .block.block-system form .form-radios .form-type-radio.radio input[type="radio"] {
+  width: 17px;
+  height: 17px;
+  margin-top: 2px;
+}
+
+/* line 406, ../sass/homepage.scss */
+.page-cart .table-responsive .table-striped tbody tr td:nth-child(1) {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* line 410, ../sass/homepage.scss */
+.page-cart .view-footer {
+  font-size: 18px;
+}
+
+/* line 411, ../sass/homepage.scss */
+.page-cart .view-footer a {
+  display: table;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  margin: 10px 0 0 0;
+  background: #f2c900;
+  color: #fff;
+  border-color: #f2c900;
+}
+
+/* line 420, ../sass/homepage.scss */
+.page-cart .view-footer a {
+  text-decoration: none;
+}
+
+/* line 421, ../sass/homepage.scss */
+.node-type-ads .node.node-ads {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* line 425, ../sass/homepage.scss */
+.node-type-ads .node.node-ads header {
+  display: none;
+}
+
+/* line 426, ../sass/homepage.scss */
+.node-type-ads .node.node-ads .field-item img {
+  max-height: 250px;
+  width: auto;
+}
+
+/* line 430, ../sass/homepage.scss */
+.node-type-ads .node.node-ads .comment-wrapper {
+  width: 100%;
+}
+
+/* line 431, ../sass/homepage.scss */
+.node-type-ads .field.field-label-above {
+  flex: 1;
+}
+
+/* line 432, ../sass/homepage.scss */
+.node-type-ads .comment-wrapper h2.title.comment-form {
+  font-size: 15px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* line 437, ../sass/homepage.scss */
+.node-type-ads .field.field-name-field-shop-photos {
+  width: 100%;
+  flex-basis: 100%;
+}
+
+/* line 441, ../sass/homepage.scss */
+.node-type-ads .field.field-name-field-shop-photos .field-items {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* line 446, ../sass/homepage.scss */
+.node-type-ads .field.field-name-field-shop-photos .field-items .field-item {
+  margin-right: 10px;
+}
+
+/* line 447, ../sass/homepage.scss */
+.page-node-add-add-to-cart div.vertical-tabs.clearfix {
+  display: none;
+}
+
+@media only screen and (max-width: 990px) {
+  /* line 450, ../sass/homepage.scss */
+  .page-user section.col-sm-12 {
+    max-width: 100%;
+  }
+}
+@media only screen and (max-width: 768px) {
+  /* line 453, ../sass/homepage.scss */
+  .page-betting-form .block.block-system form {
+    width: 100%;
+  }
+
+  /* line 454, ../sass/homepage.scss */
+  .main-container {
+    padding-bottom: 40px;
+  }
+
+  /* line 455, ../sass/homepage.scss */
+  .admin-menu section.col-sm-12 {
+    width: 100%;
+  }
+
+  /* line 456, ../sass/homepage.scss */
+  .page-payment-form #payment-form {
+    max-width: 100%;
+  }
+
+  /* line 457, ../sass/homepage.scss */
+  .navbar-default .navbar-toggle {
+    margin-top: 20px;
+  }
+
+  /* line 458, ../sass/homepage.scss */
+  .page-container.fixed-page {
+    position: relative;
+  }
+
+  /* line 459, ../sass/homepage.scss */
+  .view.view-advertisements.view-id-advertisements.view-display-id-block {
+    width: 100%;
+    position: relative;
+  }
+
+  /* line 463, ../sass/homepage.scss */
+  .page-advertisements .views-exposed-widgets {
+    flex-direction: column;
+  }
+
+  /* line 464, ../sass/homepage.scss */
+  .views-exposed-form .views-exposed-widget {
+    width: 100%;
+  }
+
+  /* line 465, ../sass/homepage.scss */
+  .banner-content h2 {
+    font-size: 2rem;
+  }
+}
