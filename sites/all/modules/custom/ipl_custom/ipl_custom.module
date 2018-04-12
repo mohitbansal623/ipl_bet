@@ -188,6 +188,9 @@ function payment_gateway() {
 function payment_form($form, &$form_state) {
 
   drupal_add_js(drupal_get_path('module', 'ipl_custom') .'/ipl_form.js', 'file');
+  $amount = isset($_SESSION['amount']) ? $_SESSION['amount'] : 0;
+  global $user;
+  $user_details = user_load($user->uid);
 
   if (!isset($form_state['payu_param_status'])) {
 
@@ -196,6 +199,7 @@ function payment_form($form, &$form_state) {
     '#description' => 'Full Name',
     '#type' => 'textfield',
     '#required' => TRUE,
+    '#default_value' => $user_details->field_full_name,
     );
 
     $form['max_payu_user_phone'] = array(
@@ -203,6 +207,7 @@ function payment_form($form, &$form_state) {
       '#type' => 'textfield',
       '#description' => 'Phone Number',
       '#required' => TRUE,
+      '#default_value' => $user_details->field_mobile_number,
     );
 
     $form['max_payu_user_email'] = array(
@@ -210,12 +215,14 @@ function payment_form($form, &$form_state) {
       '#description' => 'Email',
       '#type' => 'textfield',
       '#required' => TRUE,
+      '#default_value' => $user_details->mail,
     );
 
     $form['max_payu_user_amount'] = array(
       '#type' => 'textfield',
       '#title' => t('Amount'),
       '#required' => TRUE,
+      '#default_value' => $amount,
       '#element_validate' => array('element_validate_integer_positive'),
     );
 

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Cart Feature feature.
+ */
+
+include_once 'cart_feature.features.inc';
