@@ -130,7 +130,12 @@ global $user;
       <h2>
          Video Background option<span class="block">  One Page parallax</span>
       </h2>
-      <a href="/list-of-matches" class="button default">Matches</a> &nbsp; <a href="/user" class="button whitehole">Login now</a>
+      <a href="/list-of-matches" class="button default">Matches</a> &nbsp;
+      <?php global $user; if ($user->uid == 0): ?>
+        <a href="/user" class="button whitehole">Login now</a>
+      <?php else:  ?>
+        <a href="/user/logout" class="button whitehole">Logout</a>
+      <?php endif; ?>
       </div>
   </div>
 </section>

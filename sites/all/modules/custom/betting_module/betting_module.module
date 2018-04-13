@@ -5,7 +5,8 @@
  */
 
 function betting_module_menu() {
-  $items['betting-form'] = array(
+  $items['prediction-form'] = array(
+    'title' => 'Prediction Form',
     'page callback' => 'bet_form',
     'type' => MENU_CALLBACK,
     'access callback' => 'check_access',
@@ -86,6 +87,7 @@ function betting_form($form, &$form_state) {
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['match_winner']['submit'] = array(
@@ -132,12 +134,21 @@ function betting_module_form_alter(&$form, &$form_state, $form_id) {
     $form['field_for_match']['#access'] = FALSE;
     $form['field_form_id']['#access'] = FALSE;
     $form['title']['#access'] = FALSE;
-    $form['title']['#default_value'] = 'Match User ' . $user->uid;
+    $form['title']['#default_value'] = 'Match';
     if (isset($_SESSION['match_id']) && isset($_SESSION['form_id'])) {
+      $title = get_title_for_which_bet_is_made($_SESSION['form_id']);
+      $form['title']['#default_value'] = $title;
       $form['field_for_match']['und'][0]['value']['#default_value'] = $_SESSION['match_id'];
       $form['field_form_id']['und'][0]['value']['#default_value'] = $_SESSION['form_id'];
     }
   }
+}
+
+function get_title_for_which_bet_is_made($form_id) {
+  $form_name = db_query('SELECT t.form_name FROM {forms} AS t WHERE t.form_id = :form_id', array(':form_id' => $form_id))->fetchAll();
+
+  $form_name = isset($form_name[0]->form_name) ? $form_name[0]->form_name: 'Match';
+  return $form_name;
 }
 
 function check_direct_come() {
@@ -456,6 +467,7 @@ function betting_form2($form, &$form_state) {
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['match_toss']['submit'] = array(
@@ -507,6 +519,7 @@ function betting_form3($form, &$form_state) {
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#attributes' => array('class' => array('checked')),
   );
 
    $form['match_powerplay_runs']['submit'] = array(
@@ -557,6 +570,7 @@ function betting_form4($form, &$form_state) {
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['highest_wicket_fall']['submit'] = array(
@@ -607,6 +621,7 @@ function betting_form5($form, &$form_state) {
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['highest_fours_match']['submit'] = array(
@@ -656,6 +671,7 @@ function betting_form6($form, &$form_state) {
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['highest_six_match']['submit'] = array(
@@ -707,6 +723,7 @@ function betting_form7($form, &$form_state) {
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['extra_runs_given']['submit'] = array(
@@ -758,6 +775,7 @@ function betting_form8($form, &$form_state) {
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['top_batsman_match']['submit'] = array(
@@ -808,6 +826,7 @@ function betting_form9($form, &$form_state) {
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['top_bowler_match']['submit'] = array(
@@ -858,6 +877,7 @@ function betting_form10($form, &$form_state) {
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['highest_partnership']['submit'] = array(
@@ -908,6 +928,7 @@ function betting_form11($form, &$form_state) {
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['highest_catch_without_keeper']['submit'] = array(
@@ -958,6 +979,7 @@ function betting_form12($form, &$form_state) {
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['highest_dismissal_keeper']['submit'] = array(
@@ -1007,6 +1029,7 @@ function betting_form13($form, &$form_state) {
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['player_score_50']['submit'] = array(
@@ -1056,6 +1079,7 @@ function betting_form14($form, &$form_state) {
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['highest_poweplay_4s']['submit'] = array(
