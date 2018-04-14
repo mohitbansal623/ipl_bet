@@ -77,6 +77,14 @@ function custom_match_configuration($form, &$form_state) {
     '#title' => 'Match Results',
   );
 
+  $form['match_results']['current_match_id'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Match ID'),
+    '#description' => t('Enter Match ID for which you want results. Match ID is there in Admin Interface along with the list of matches.'),
+    '#default_value' => variable_get('current_match_id', ''),
+    '#required' => TRUE,
+  );
+
   $form['match_results']['match_winner'] = array(
     '#type' => 'textfield',
     '#title' => t('Match Winner'),
@@ -245,7 +253,7 @@ function payment_form($form, &$form_state) {
     '#description' => 'Full Name',
     '#type' => 'textfield',
     '#required' => TRUE,
-    '#default_value' => $user_details->field_full_name,
+    '#default_value' => isset($user_details->field_full_name['und'][0]['value']) ?$user_details->field_full_name['und'][0]['value']: NULL ,
     );
 
     $form['max_payu_user_phone'] = array(
@@ -253,7 +261,7 @@ function payment_form($form, &$form_state) {
       '#type' => 'textfield',
       '#description' => 'Phone Number',
       '#required' => TRUE,
-      '#default_value' => $user_details->field_mobile_number,
+      '#default_value' => isset($user_details->field_mobile_number['und'][0]['value']) ?$user_details->field_mobile_number['und'][0]['value'] : NULL ,
     );
 
     $form['max_payu_user_email'] = array(
@@ -354,8 +362,8 @@ function payment_form_submit($form, &$form_state) {
   }
   $txnid = max_payu_get_unique_transaction_id();
   $productinfo = variable_get('max_payu_productinfo', 'maxprodpayu');
-  $merchant_key = 'rjQUPktU';
-  $salt = 'e5iIg1jwi8';
+  $merchant_key = 'gtKFFx';
+  $salt = 'eCwWELxi';
 
   // Calculate sha512 hash value.
   $sha512 = $merchant_key . '|' .$txnid .'|' . $amount . '|' . $productinfo . '|' . $name . '|' . $email .'|||||||||||' . $salt;
@@ -447,6 +455,7 @@ function max_payu_payment_status() {
       $transaction_details['card_type'] = $card_type;
 
       $transaction_details['receipt_no'] = NULL;
+      $transaction_details['match_id'] = $_SESSION['nid'];
       /***********************************/
 
 
@@ -599,6 +608,7 @@ function max_payu_insert_transaction_details($transaction_details = array()) {
         'mihpayid' => $transaction_details['mihpayid'],
         'payment_mode' => $transaction_details['payment_mode'],
         'card_type' => $transaction_details['card_type'],
+        'match_id' => $transaction_details['match_id'],
       ))
       ->execute();
     }
@@ -734,4 +744,96 @@ function max_payu_submission($form, &$form_state) {
 
     return $form;
   }
+}
+
+// Calculation of final results
+function get_final_results() {
+  $query = db_select('forms', 'f')
+    ->fields('f', array('form_id', 'form_name'));
+  $results = $query->execute()->fetchAll();
+  if (!empty($results)) {
+    foreach($results as $key => $value) {
+      $form_name = $value->form_name;
+      $form_id = $value->form_id;
+      $current_match_id = variable_get('current_match_id', '');
+      switch ($form_id) {
+        case 1:
+          $final_ans = variable_get('match_winner', '');
+          break;
+        case 2:
+          $final_ans = variable_get('match_toss', '');
+          break;
+        case 3:
+          $final_ans = variable_get('match_powerplay_runs', '');
+          break;
+        case 4:
+          $final_ans = variable_get('highest_wicket_fall', '');
+          break;
+        case 5:
+          $final_ans = variable_get('highest_fours_match', '');
+          break;
+        case 6:
+          $final_ans = variable_get('highest_six_match', '');
+          break;
+        case 7:
+          $final_ans = variable_get('extra_runs_given', '');
+          break;
+        case 8:
+          $final_ans = variable_get('top_batsman_match', '');
+          break;
+        case 9:
+          $final_ans = variable_get('top_bowler_match', '');
+          break;
+        case 10:
+          $final_ans = variable_get('highest_partnership', '');
+          break;
+        case 11:
+          $final_ans = variable_get('highest_catch_without_keeper', '');
+          break;
+        case 12:
+          $final_ans = variable_get('highest_dismissal_keeper', '');
+          break;
+        case 13:
+          $final_ans = variable_get('player_score_50', '');
+          break;
+        case 14:
+          $final_ans = variable_get('highest_poweplay_4s', '');
+          break;
+        case 15:
+          $final_ans = variable_get('top_batsman_team_a', '');
+          break;
+        case 16:
+          $final_ans = variable_get('top_batsman_team_b', '');
+          break;
+        case 17:
+          $final_ans = variable_get('top_bowler_team_a', '');
+          break;
+        case 18:
+          $final_ans = variable_get('top_bowler_team_b', '');
+          break;
+        default:
+          $final_ans = NULL;
+      }
+
+      $results = get_data_for_users_win($form_id, $current_match_id, $final_ans);
+      $results[$form_name] = !empty($results)? $results : NULL;
+    }
+  }
+
+  return $results;
+}
+
+
+function get_data_for_users_win($form_id, $current_match_id, $final_ans) {
+  $query = db_select("betting", "b")
+    -> fields('b', array('uid'))
+    -> fields('m', array('amount', 'paid_by'));
+  $query-> join('max_payu_transaction_details', 'm', "m.match_id = b.nid");
+  $query->condition("b.form_id", $form_id);
+  $query->condition('b.select_value', $final_ans);
+  $query->condition('b.nid', $current_match_id);
+  $query->condition('m.status', 'failure');
+  $results = $query->execute()->fetchAll();
+
+  return $results;
 }
