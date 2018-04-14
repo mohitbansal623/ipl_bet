@@ -82,6 +82,7 @@ function custom_match_configuration($form, &$form_state) {
     '#title' => t('Match Winner'),
     '#description' => t('Fill A if Team A wins and B if Team B'),
     '#default_value' => variable_get('match_winner', ''),
+    '#required' => TRUE,
   );
 
   $form['match_results']['match_toss'] = array(
@@ -89,6 +90,7 @@ function custom_match_configuration($form, &$form_state) {
     '#title' => t('Match Toss'),
     '#description' => t('Fill A if Team A wins and B if Team B'),
     '#default_value' => variable_get('match_toss', ''),
+    '#required' => TRUE,
   );
 
   $form['match_results']['match_powerplay_runs'] = array(
@@ -96,6 +98,7 @@ function custom_match_configuration($form, &$form_state) {
     '#title' => t('Highest Powerplay Runs'),
     '#description' => t('Fill A if Team A wins and B if Team B'),
     '#default_value' => variable_get('match_powerplay_runs', ''),
+    '#required' => TRUE,
   );
 
   $form['match_results']['highest_wicket_fall'] = array(
@@ -103,6 +106,7 @@ function custom_match_configuration($form, &$form_state) {
     '#title' => t('Highest Wicket Fall'),
     '#description' => t('Fill A if Team A wins and B if Team B'),
     '#default_value' => variable_get('highest_wicket_fall', ''),
+    '#required' => TRUE,
   );
 
   $form['match_results']['highest_fours_match'] = array(
@@ -110,6 +114,7 @@ function custom_match_configuration($form, &$form_state) {
     '#title' => t('Highest 4s in match'),
     '#description' => t('Fill A if Team A wins and B if Team B'),
     '#default_value' => variable_get('highest_fours_match', ''),
+    '#required' => TRUE,
   );
 
   $form['match_results']['highest_six_match'] = array(
@@ -117,6 +122,7 @@ function custom_match_configuration($form, &$form_state) {
     '#title' => t('Highest 6s in match'),
     '#description' => t('Fill A if Team A wins and B if Team B'),
     '#default_value' => variable_get('highest_six_match', ''),
+    '#required' => TRUE,
   );
 
   $form['match_results']['extra_runs_given'] = array(
@@ -124,6 +130,7 @@ function custom_match_configuration($form, &$form_state) {
     '#title' => t('Extra runs given'),
     '#description' => t('Fill A if Team A wins and B if Team B'),
     '#default_value' => variable_get('extra_runs_given', ''),
+    '#required' => TRUE,
   );
 
   $form['match_results']['top_batsman_match'] = array(
@@ -131,6 +138,7 @@ function custom_match_configuration($form, &$form_state) {
     '#title' => t('Top Batsman in Match'),
     '#description' => t('Fill A if Team A wins and B if Team B'),
     '#default_value' => variable_get('top_batsman_match', ''),
+    '#required' => TRUE,
   );
 
   $form['match_results']['top_bowler_match'] = array(
@@ -138,6 +146,7 @@ function custom_match_configuration($form, &$form_state) {
     '#title' => t('Top Bowler in Match'),
     '#description' => t('Fill A if Team A wins and B if Team B'),
     '#default_value' => variable_get('top_bowler_match', ''),
+    '#required' => TRUE,
   );
 
   $form['match_results']['highest_partnership'] = array(
@@ -145,6 +154,7 @@ function custom_match_configuration($form, &$form_state) {
     '#title' => t('Highest Opening Partnership'),
     '#description' => t('Fill A if Team A wins and B if Team B'),
     '#default_value' => variable_get('highest_partnership', ''),
+    '#required' => TRUE,
   );
 
   $form['match_results']['highest_catch_without_keeper'] = array(
@@ -152,6 +162,7 @@ function custom_match_configuration($form, &$form_state) {
     '#title' => t('Highest Catch Out Without Including Keeper'),
     '#description' => t('Fill A if Team A wins and B if Team B'),
     '#default_value' => variable_get('highest_catch_without_keeper', ''),
+    '#required' => TRUE,
   );
 
   $form['match_results']['highest_dismissal_keeper'] = array(
@@ -159,6 +170,7 @@ function custom_match_configuration($form, &$form_state) {
     '#title' => t('Highest Dismissal by Keeper'),
     '#description' => t('Fill A if Team A wins and B if Team B'),
     '#default_value' => variable_get('highest_dismissal_keeper', ''),
+    '#required' => TRUE,
   );
 
   $form['match_results']['player_score_50'] = array(
@@ -166,6 +178,7 @@ function custom_match_configuration($form, &$form_state) {
     '#title' => t('Player Score 50'),
     '#description' => t('Fill A if Team A wins and B if Team B'),
     '#default_value' => variable_get('player_score_50', ''),
+    '#required' => TRUE,
   );
 
   $form['match_results']['highest_poweplay_4s'] = array(
@@ -173,6 +186,39 @@ function custom_match_configuration($form, &$form_state) {
     '#title' => t('Highest Powerplay Boundaries'),
     '#description' => t('Fill A if Team A wins and B if Team B'),
     '#default_value' => variable_get('highest_poweplay_4s', ''),
+    '#required' => TRUE,
+  );
+
+  $form['match_results']['top_batsman_team_a'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Top Batsman Team A'),
+    '#description' => t('Fill Answers in form of continuous string eg. ABC. It means A, B, C'),
+    '#default_value' => variable_get('top_batsman_team_a', ''),
+    '#required' => TRUE,
+  );
+
+  $form['match_results']['top_batsman_team_b'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Top Batsman Team B'),
+    '#description' => t('Fill Answers in form of continuous string eg. ABC. It means A, B, C'),
+    '#default_value' => variable_get('top_batsman_team_b', ''),
+    '#required' => TRUE,
+  );
+
+  $form['match_results']['top_bowler_team_a'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Top Bowler Team A'),
+    '#description' => t('Fill Answers in form of continuous string eg. ABC. It means A, B, C'),
+    '#default_value' => variable_get('top_bowler_team_a', ''),
+    '#required' => TRUE,
+  );
+
+  $form['match_results']['top_bowler_team_b'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Top Bowler Team B'),
+    '#description' => t('Fill Answers in form of continuous string eg. ABC. It means A, B, C'),
+    '#default_value' => variable_get('top_bowler_team_b', ''),
+    '#required' => TRUE,
   );
 
   return system_settings_form($form);
@@ -308,6 +354,8 @@ function payment_form_submit($form, &$form_state) {
   }
   $txnid = max_payu_get_unique_transaction_id();
   $productinfo = variable_get('max_payu_productinfo', 'maxprodpayu');
+  $merchant_key = 'rjQUPktU';
+  $salt = 'e5iIg1jwi8';
 
   // Calculate sha512 hash value.
   $sha512 = $merchant_key . '|' .$txnid .'|' . $amount . '|' . $productinfo . '|' . $name . '|' . $email .'|||||||||||' . $salt;
