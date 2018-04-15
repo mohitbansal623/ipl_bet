@@ -136,7 +136,6 @@ global $user;
       <?php else: ?>
         <a href="/user/logout" class="button whitehole">Logout</a>
       <?php endif; ?>
-
       </div>
   </div>
 </section>

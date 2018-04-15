@@ -203,6 +203,8 @@ function matches_view_views_default_views() {
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = '<none>';
   $handler->display->display_options['defaults']['fields'] = FALSE;
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
@@ -286,7 +288,7 @@ function matches_view_views_default_views() {
 $result = check_betting_time($row->nid);
 if ($result) {
 $_SESSION[\'nid\'] = $row->nid;
-echo "<a href=\'/betting-form\' class=\'btn btn-default\'> Bet Now</a>";
+echo "<a href=\'/prediction-form\' class=\'btn btn-default\'> Join Now</a>";
 }
 
 ?>';
@@ -429,6 +431,22 @@ echo "<a href=\'/betting-form\' class=\'btn btn-default\'> Bet Now</a>";
     'multiple_to' => '',
     'show_remaining_days' => 1,
   );
+  /* Field: Global: PHP */
+  $handler->display->display_options['fields']['php']['id'] = 'php';
+  $handler->display->display_options['fields']['php']['table'] = 'views';
+  $handler->display->display_options['fields']['php']['field'] = 'php';
+  $handler->display->display_options['fields']['php']['label'] = '';
+  $handler->display->display_options['fields']['php']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php']['php_output'] = '<?php
+$result = check_betting_time($row->nid);
+if ($result) {
+$_SESSION[\'nid\'] = $row->nid;
+echo "<a href=\'/prediction-form\' class=\'btn btn-default\'> Join Now</a>";
+}
+?>';
+  $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
   /* Filter criterion: Content: Published */
@@ -456,6 +474,30 @@ echo "<a href=\'/betting-form\' class=\'btn btn-default\'> Bet Now</a>";
     'field_data_field_match_date.field_match_date_value' => 'field_data_field_match_date.field_match_date_value',
   );
   $handler->display->display_options['block_description'] = 'Upcoming Matches';
+  $translatables['list_of_matches'] = array(
+    t('Master'),
+    t('<none>'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('<h2>Today\'s Matches</h2>'),
+    t('Nid'),
+    t('Page'),
+    t('Block'),
+    t('Past Matches'),
+    t('Block 2'),
+    t('Upcoming Matches'),
+  );
   $export['list_of_matches'] = $view;
 
   return $export;

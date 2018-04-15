@@ -151,8 +151,6 @@ function ads_views_default_views() {
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
-  $handler->display->display_options['defaults']['use_ajax'] = FALSE;
-  $handler->display->display_options['use_ajax'] = TRUE;
   $handler->display->display_options['defaults']['style_plugin'] = FALSE;
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
@@ -248,9 +246,7 @@ function ads_views_default_views() {
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['label'] = '';
   $handler->display->display_options['fields']['title']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['title']['alter']['text'] = 'All advertisements';
-  $handler->display->display_options['fields']['title']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['title']['alter']['path'] = 'advertisements';
+  $handler->display->display_options['fields']['title']['alter']['text'] = '<a href="/advertisements">All Advertisements </a>';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
@@ -295,7 +291,36 @@ function ads_views_default_views() {
     'thousand_separator' => '',
     'prefix_suffix' => 1,
   );
-  $handler->display->display_options['block_description'] = 'Ads Block';
+  $translatables['advertisements'] = array(
+    t('Master'),
+    t('Advertisements'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('Shop Photos'),
+    t('Shop Items'),
+    t('Shop Address'),
+    t('Shop City'),
+    t('Shop State'),
+    t('Shop Pin Code'),
+    t('Search By Pin Code'),
+    t('Search By City'),
+    t('Search By State'),
+    t('Page'),
+    t('No results found'),
+    t('Block'),
+    t('<a href="/advertisements">All Advertisements </a>'),
+  );
   $export['advertisements'] = $view;
 
   return $export;

@@ -5,7 +5,8 @@
  */
 
 function betting_module_menu() {
-  $items['betting-form'] = array(
+  $items['prediction-form'] = array(
+    'title' => 'Prediction Form',
     'page callback' => 'bet_form',
     'type' => MENU_CALLBACK,
     'access callback' => 'check_access',
@@ -43,13 +44,18 @@ function bet_form() {
   $renderable_form[10] = drupal_get_form('betting_form11');
   $renderable_form[11] = drupal_get_form('betting_form12');
   $renderable_form[12] = drupal_get_form('betting_form13');
-
+  $renderable_form[13] = drupal_get_form('betting_form14');
+  $renderable_form[14] = drupal_get_form('betting_form15');
+  $renderable_form[15] = drupal_get_form('betting_form16');
+  $renderable_form[16] = drupal_get_form('betting_form17');
+  $renderable_form[17] = drupal_get_form('betting_form18');
 
   return $renderable_form;
 }
 
 
 function betting_form($form, &$form_state) {
+  global $user;
   $form['nid'] = array(
    '#type' => 'hidden',
    '#value' => $_SESSION['nid'], // Nid of the Match will come
@@ -81,21 +87,42 @@ function betting_form($form, &$form_state) {
   );
 
   $active = array('A' => $teamA, 'B' => $teamB);
+  $user_id = $user->uid;
+  $id = 1;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
 
   $form['match_winner']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#default_value' => isset($markAnswer) ? $markAnswer : NULL,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['match_winner']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Click to Join'),
+    '#value' => t('Join'),
     '#submit' => array('save_match_winner'),
     '#name' => 1,
   );
 
   return $form;
+}
+
+function get_mark_answer($uid, $id, $nid) {
+  $query = db_select('betting', 'at')
+        -> fields('at', array('select_value'));
+  $query->condition('at.uid', $uid);
+  $query->condition('at.nid', $nid);
+  $query->condition('at.form_id', $id);
+  $data = $query->execute()->fetchCol();
+  if (!empty($data)) {
+    $option = $data[0];
+
+    return $option;
+  }
+
+  return NULL;
 }
 
 function save_match_winner($form, &$form_state) {
@@ -132,12 +159,21 @@ function betting_module_form_alter(&$form, &$form_state, $form_id) {
     $form['field_for_match']['#access'] = FALSE;
     $form['field_form_id']['#access'] = FALSE;
     $form['title']['#access'] = FALSE;
-    $form['title']['#default_value'] = 'Match User ' . $user->uid;
+    $form['title']['#default_value'] = 'Match';
     if (isset($_SESSION['match_id']) && isset($_SESSION['form_id'])) {
+      $title = get_title_for_which_bet_is_made($_SESSION['form_id']);
+      $form['title']['#default_value'] = $title;
       $form['field_for_match']['und'][0]['value']['#default_value'] = $_SESSION['match_id'];
       $form['field_form_id']['und'][0]['value']['#default_value'] = $_SESSION['form_id'];
     }
   }
+}
+
+function get_title_for_which_bet_is_made($form_id) {
+  $form_name = db_query('SELECT t.form_name FROM {forms} AS t WHERE t.form_id = :form_id', array(':form_id' => $form_id))->fetchAll();
+
+  $form_name = isset($form_name[0]->form_name) ? $form_name[0]->form_name: 'Match';
+  return $form_name;
 }
 
 function check_direct_come() {
@@ -451,16 +487,22 @@ function betting_form2($form, &$form_state) {
   );
 
   $active = array('A' => $teamA, 'B' => $teamB);
+  global $user;
+  $user_id = $user->uid;
+  $id = 2;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
 
   $form['match_toss']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#default_value' => isset($markAnswer) ? $markAnswer : NULL,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['match_toss']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Click to Join'),
+    '#value' => t('Join'),
     '#submit' => array('save_match_toss'),
     '#name' => 2,
   );
@@ -502,16 +544,22 @@ function betting_form3($form, &$form_state) {
   );
 
   $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+  global $user;
+  $user_id = $user->uid;
+  $id = 3;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
 
   $form['match_powerplay_runs']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#default_value' => isset($markAnswer) ? $markAnswer : NULL,
+    '#attributes' => array('class' => array('checked')),
   );
 
    $form['match_powerplay_runs']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Click to Join'),
+    '#value' => t('Join'),
     '#submit' => array('save_match_powerplay_runs'),
     '#name' => 3,
   );
@@ -552,16 +600,22 @@ function betting_form4($form, &$form_state) {
   );
 
   $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+  global $user;
+  $user_id = $user->uid;
+  $id = 4;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
 
   $form['highest_wicket_fall']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#default_value' => isset($markAnswer) ? $markAnswer : NULL,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['highest_wicket_fall']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Click to Join'),
+    '#value' => t('Join'),
     '#submit' => array('save_highest_wicket_fall'),
     '#name' => 4,
   );
@@ -602,16 +656,24 @@ function betting_form5($form, &$form_state) {
   );
 
   $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+  global $user;
+  $user_id = $user->uid;
+  $id = 5;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
+
+
 
   $form['highest_fours_match']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#default_value' => isset($markAnswer) ? $markAnswer : NULL,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['highest_fours_match']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Click to Join'),
+    '#value' => t('Join'),
     '#submit' => array('save_highest_fours_match'),
     '#name' => 5,
   );
@@ -651,16 +713,24 @@ function betting_form6($form, &$form_state) {
   );
 
   $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+  global $user;
+  $user_id = $user->uid;
+  $id = 6;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
+
+
 
   $form['highest_six_match']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#default_value' => isset($markAnswer) ? $markAnswer : NULL,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['highest_six_match']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Click to Join'),
+    '#value' => t('Join'),
     '#submit' => array('save_highest_six_match'),
     '#name' => 6,
   );
@@ -702,16 +772,24 @@ function betting_form7($form, &$form_state) {
   );
 
   $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+  global $user;
+  $user_id = $user->uid;
+  $id = 7;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
+
+
 
   $form['extra_runs_given']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#default_value' => isset($markAnswer) ? $markAnswer : NULL,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['extra_runs_given']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Click to Join'),
+    '#value' => t('Join'),
     '#submit' => array('save_extra_runs_given'),
     '#name' => 7,
   );
@@ -753,16 +831,24 @@ function betting_form8($form, &$form_state) {
   );
 
   $active = array('A' => $teamA, 'B' => $teamB);
+  global $user;
+  $user_id = $user->uid;
+  $id = 8;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
+
+
 
   $form['top_batsman_match']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#default_value' => isset($markAnswer) ? $markAnswer : NULL,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['top_batsman_match']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Click to Join'),
+    '#value' => t('Join'),
     '#submit' => array('save_top_batsman_match'),
     '#name' => 8,
   );
@@ -803,16 +889,24 @@ function betting_form9($form, &$form_state) {
   );
 
   $active = array('A' => $teamA, 'B' => $teamB);
+  global $user;
+  $user_id = $user->uid;
+  $id = 9;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
+
+
 
   $form['top_bowler_match']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#default_value' => isset($markAnswer) ? $markAnswer : NULL,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['top_bowler_match']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Click to Join'),
+    '#value' => t('Join'),
     '#submit' => array('save_top_bowler_match'),
     '#name' => 9,
   );
@@ -853,16 +947,24 @@ function betting_form10($form, &$form_state) {
   );
 
   $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+  global $user;
+  $user_id = $user->uid;
+  $id = 10;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
+
+
 
   $form['highest_partnership']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#default_value' => isset($markAnswer) ? $markAnswer : NULL,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['highest_partnership']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Click to Join'),
+    '#value' => t('Join'),
     '#submit' => array('save_highest_partnership'),
     '#name' => 10,
   );
@@ -903,16 +1005,24 @@ function betting_form11($form, &$form_state) {
   );
 
   $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+  global $user;
+  $user_id = $user->uid;
+  $id = 11;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
+
+
 
   $form['highest_catch_without_keeper']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#default_value' => isset($markAnswer) ? $markAnswer : NULL,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['highest_catch_without_keeper']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Click to Join'),
+    '#value' => t('Join'),
     '#submit' => array('save_highest_catch_without_keeper'),
     '#name' => 11,
   );
@@ -953,16 +1063,24 @@ function betting_form12($form, &$form_state) {
   );
 
   $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+  global $user;
+  $user_id = $user->uid;
+  $id = 12;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
+
+
 
   $form['highest_dismissal_keeper']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#default_value' => isset($markAnswer) ? $markAnswer : NULL,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['highest_dismissal_keeper']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Click to Join'),
+    '#value' => t('Join'),
     '#submit' => array('save_highest_dismissal_keeper'),
     '#name' => 12,
   );
@@ -1002,16 +1120,24 @@ function betting_form13($form, &$form_state) {
   );
 
   $active = array('A' => $teamA, 'B' => $teamB);
+  global $user;
+  $user_id = $user->uid;
+  $id = 13;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
+
+
 
   $form['player_score_50']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#default_value' => isset($markAnswer) ? $markAnswer : NULL,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['player_score_50']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Click to Join'),
+    '#value' => t('Join'),
     '#submit' => array('save_player_score_50'),
     '#name' => 13,
   );
@@ -1051,19 +1177,339 @@ function betting_form14($form, &$form_state) {
   );
 
   $active = array('A' => $teamA, 'B' => $teamB, 'C' => $teamC);
+  global $user;
+  $user_id = $user->uid;
+  $id = 14;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
+
+
 
   $form['highest_poweplay_4s']['options'] = array(
     '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
+    '#default_value' => isset($markAnswer) ? $markAnswer : NULL,
+    '#attributes' => array('class' => array('checked')),
   );
 
   $form['highest_poweplay_4s']['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Click to Join'),
+    '#value' => t('Join'),
     '#submit' => array('save_highest_poweplay_4s'),
     '#name' => 14,
   );
 
    return $form;
  }
+
+
+function betting_module_node_delete($node) {
+  db_delete('betting')
+    ->condition('uid', $node->uid)
+    ->condition('nid', $node->field_for_match['und'][0]['value'])
+    ->condition('form_id', $node->field_form_id['und'][0]['value'])
+    ->execute();
+}
+
+function betting_form15($form, &$form_state) {
+  $form['nid'] = array(
+   '#type' => 'hidden',
+   '#value' => $_SESSION['nid'], // Nid of the Match will come
+  );
+
+  $node = node_load($_SESSION['nid']);
+  if (!empty($node)) {
+    $total = count($node->field_top_batsman_of_team_a['und']);
+    $active = array();
+    $j = 'A';
+    for ($i = 0 ; $i < $total; $i++) {
+      $active[$j] = $node->field_top_batsman_of_team_a['und'][$i]['value'];
+      $j++;
+    }
+  }
+
+  else {
+    drupal_set_message(t("Access denied"), 'warning');
+
+    return $form;
+  }
+
+  // Highest Powerplay Boundaries
+  $form['top_batsman_team_a'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Top Batsman Team A',
+  );
+
+  $form['top_batsman_team_a']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 15, // Form ID
+  );
+
+  global $user;
+  $user_id = $user->uid;
+  $id = 15;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
+  $default_value = isset($markAnswer) ? $markAnswer : array();
+  if (!empty($default_value)) {
+    $default_value = str_split ( $default_value );
+  }
+
+
+  $form['top_batsman_team_a']['options'] = array(
+    '#type' => 'checkboxes',
+    '#options' => $active,
+    '#required' => TRUE,
+    '#default_value' => $default_value,
+    '#attributes' => array('class' => array('checked')),
+  );
+
+  $form['top_batsman_team_a']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Join'),
+    '#submit' => array('save_top_batsman_team_a'),
+    '#name' => 15,
+  );
+
+   return $form;
+ }
+
+
+function save_top_batsman_team_a($form, &$form_state) {
+  global $user;
+
+  $uid = $user->uid;
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['top_batsman_team_a']['form_id']['#value']) ? $form_state['complete form']['top_batsman_team_a']['form_id']['#value']: NULL;
+  $option = isset($form_state['complete form']['top_batsman_team_a']['options']['#value'])? $form_state['complete form']['top_batsman_team_a']['options']['#value']: NULL;
+
+  $option = implode("",$option);
+  set_session_and_redirect_user($nid, $form_id, $uid, $option);
+}
+
+
+function betting_form16($form, &$form_state) {
+  $form['nid'] = array(
+   '#type' => 'hidden',
+   '#value' => $_SESSION['nid'], // Nid of the Match will come
+  );
+
+  $node = node_load($_SESSION['nid']);
+  if (!empty($node)) {
+    $total = count($node->field_top_batsman_of_team_b['und']);
+    $active = array();
+    $j = 'A';
+    for ($i = 0 ; $i < $total; $i++) {
+      $active[$j] = $node->field_top_batsman_of_team_b['und'][$i]['value'];
+      $j++;
+    }
+  }
+
+  else {
+    drupal_set_message(t("Access denied"), 'warning');
+
+    return $form;
+  }
+
+  // Highest Powerplay Boundaries
+  $form['top_batsman_team_b'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Top Batsman Team B',
+  );
+
+  $form['top_batsman_team_b']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 16, // Form ID
+  );
+
+  global $user;
+  $user_id = $user->uid;
+  $id = 16;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
+  $default_value = isset($markAnswer) ? $markAnswer : array();
+  if (!empty($default_value)) {
+    $default_value = str_split ( $default_value );
+  }
+
+
+  $form['top_batsman_team_b']['options'] = array(
+    '#type' => 'checkboxes',
+    '#options' => $active,
+    '#required' => TRUE,
+    '#default_value' => $default_value,
+    '#attributes' => array('class' => array('checked')),
+  );
+
+  $form['top_batsman_team_b']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Join'),
+    '#submit' => array('save_top_batsman_team_b'),
+    '#name' => 16,
+  );
+
+   return $form;
+ }
+
+
+function save_top_batsman_team_b($form, &$form_state) {
+  global $user;
+
+  $uid = $user->uid;
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['top_batsman_team_b']['form_id']['#value']) ? $form_state['complete form']['top_batsman_team_b']['form_id']['#value']: NULL;
+  $option = isset($form_state['complete form']['top_batsman_team_b']['options']['#value'])? $form_state['complete form']['top_batsman_team_b']['options']['#value']: NULL;
+  $option = implode("",$option);
+  set_session_and_redirect_user($nid, $form_id, $uid, $option);
+}
+
+
+function betting_form17($form, &$form_state) {
+  $form['nid'] = array(
+   '#type' => 'hidden',
+   '#value' => $_SESSION['nid'], // Nid of the Match will come
+  );
+
+  $node = node_load($_SESSION['nid']);
+  if (!empty($node)) {
+    $total = count($node->field_top_bowler_of_team_a['und']);
+    $active = array();
+    $j = 'A';
+    for ($i = 0 ; $i < $total; $i++) {
+      $active[$j] = $node->field_top_bowler_of_team_a['und'][$i]['value'];
+      $j++;
+    }
+  }
+
+  else {
+    drupal_set_message(t("Access denied"), 'warning');
+
+    return $form;
+  }
+
+  // Highest Powerplay Boundaries
+  $form['top_bowler_team_a'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Top Bowler Team A',
+  );
+
+  $form['top_bowler_team_a']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 17, // Form ID
+  );
+
+  global $user;
+  $user_id = $user->uid;
+  $id = 17;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
+  $default_value = isset($markAnswer) ? $markAnswer : array();
+  if (!empty($default_value)) {
+    $default_value = str_split ( $default_value );
+  }
+
+
+  $form['top_bowler_team_a']['options'] = array(
+    '#type' => 'checkboxes',
+    '#options' => $active,
+    '#required' => TRUE,
+    '#default_value' => $default_value,
+    '#attributes' => array('class' => array('checked')),
+  );
+
+  $form['top_bowler_team_a']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Join'),
+    '#submit' => array('save_top_bowler_team_a'),
+    '#name' => 17,
+  );
+
+   return $form;
+ }
+
+
+function save_top_bowler_team_a($form, &$form_state) {
+  global $user;
+
+  $uid = $user->uid;
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['top_bowler_team_a']['form_id']['#value']) ? $form_state['complete form']['top_bowler_team_a']['form_id']['#value']: NULL;
+  $option = isset($form_state['complete form']['top_bowler_team_a']['options']['#value'])? $form_state['complete form']['top_bowler_team_a']['options']['#value']: NULL;
+  $option = implode("",$option);
+  set_session_and_redirect_user($nid, $form_id, $uid, $option);
+}
+
+
+function betting_form18($form, &$form_state) {
+  $form['nid'] = array(
+   '#type' => 'hidden',
+   '#value' => $_SESSION['nid'], // Nid of the Match will come
+  );
+
+  $node = node_load($_SESSION['nid']);
+  if (!empty($node)) {
+    $total = count($node->field_top_bowler_of_team_b['und']);
+    $active = array();
+    $j = 'A';
+    for ($i = 0 ; $i < $total; $i++) {
+      $active[$j] = $node->field_top_bowler_of_team_b['und'][$i]['value'];
+      $j++;
+    }
+  }
+
+  else {
+    drupal_set_message(t("Access denied"), 'warning');
+
+    return $form;
+  }
+
+  // Highest Powerplay Boundaries
+  $form['top_bowler_team_b'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Top Bowler Team B',
+  );
+
+  $form['top_bowler_team_b']['form_id'] = array(
+   '#type' => 'hidden',
+   '#value' => 18, // Form ID
+  );
+
+  global $user;
+  $user_id = $user->uid;
+  $id = 18;
+  $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
+  $default_value = isset($markAnswer) ? $markAnswer : array();
+  if (!empty($default_value)) {
+    $default_value = str_split ( $default_value );
+  }
+
+
+  $form['top_bowler_team_b']['options'] = array(
+    '#type' => 'checkboxes',
+    '#options' => $active,
+    '#required' => TRUE,
+    '#default_value' => $default_value,
+    '#attributes' => array('class' => array('checked')),
+  );
+
+  $form['top_bowler_team_b']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Join'),
+    '#submit' => array('save_top_bowler_team_b'),
+    '#name' => 18,
+  );
+
+   return $form;
+ }
+
+
+function save_top_bowler_team_b($form, &$form_state) {
+  global $user;
+
+  // dpm($form_state);
+  $uid = $user->uid;
+  $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
+  $form_id = isset($form_state['complete form']['top_bowler_team_b']['form_id']['#value']) ? $form_state['complete form']['top_bowler_team_b']['form_id']['#value']: NULL;
+  $option = isset($form_state['complete form']['top_bowler_team_b']['options']['#value'])? $form_state['complete form']['top_bowler_team_b']['options']['#value']: NULL;
+  // if (count())
+  $option = implode("",$option);
+  // dpm($option);
+  set_session_and_redirect_user($nid, $form_id, $uid, $option);
+}

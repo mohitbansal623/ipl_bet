@@ -259,6 +259,7 @@ body, html {
   font-size: 18px;
   text-transform: uppercase;
   font-weight: bold;
+  font-family: boldfont;
 }
 
 /* line 161, ../sass/homepage.scss */
@@ -282,11 +283,11 @@ body, html {
   border-left: 5px solid #FDB913;
 }
 /*10-04-18*/
-.page-betting-form .block.block-system {
+.page-prediction-form .block.block-system {
     display: flex;
     flex-wrap: wrap;
 }
-.page-betting-form .block.block-system form {
+.page-prediction-form .block.block-system form {
     width: calc(33.33% - 20px);
     margin: 10px;
     border-radius: 0;
@@ -296,7 +297,7 @@ body, html {
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
     box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
 }
-.page-betting-form .block.block-system form  fieldset.panel-default{
+.page-prediction-form .block.block-system form  fieldset.panel-default{
     margin: 0;
     background-color: #fff;
     border: 0;
@@ -304,9 +305,9 @@ body, html {
     -webkit-box-shadow: none;
     box-shadow: none;
 }
-.page-betting-form .block.block-system form fieldset .panel-heading{border:none;text-transform: uppercase;border-bottom: 1px solid #c2b9e4;}
-.page-betting-form .block.block-system form fieldset .panel-heading .panel-title{font-size: 14px;color: #50457b;}
-.page-betting-form .block.block-system form .form-radios .form-type-radio {margin-bottom: 10px;}
+.page-prediction-form .block.block-system form fieldset .panel-heading{border:none;text-transform: uppercase;border-bottom: 1px solid #c2b9e4;}
+.page-prediction-form .block.block-system form fieldset .panel-heading .panel-title{font-size: 14px;color: #50457b;}
+.page-prediction-form .block.block-system form .form-radios .form-type-radio {margin-bottom: 10px;}
 .page-header{
   font-size: 20px;
   text-transform: uppercase;
@@ -318,7 +319,7 @@ header#navbar.navbar.container {
     max-width: 100%;
 }
 .main-container{padding-top: 90px; padding-bottom: 40px;}
-.page-betting-form .block.block-system .view-list-of-matches{width:100%;}
+.page-prediction-form .block.block-system .view-list-of-matches{width:100%;}
 .page-user-login .block.block-system form, .page-user-register .block.block-system form, .page-user-password .block.block-system form, .not-logged-in .block.block-system form{
   box-shadow: 0 3px 9px rgba(0, 0, 0, .07);
     width: 100%;
@@ -398,7 +399,7 @@ body,html{height:100%;}
   font-weight: bold;
   font-size: 16px;
 }
-.page-betting-form .block.block-system form .form-radios .form-type-radio.radio input[type="radio"]{
+.page-prediction-form .block.block-system form .form-radios .form-type-radio.radio input[type="radio"]{
     width: 17px;
     height: 17px;
     margin-top: 2px;
@@ -450,7 +451,7 @@ body,html{height:100%;}
   .page-user section.col-sm-12 {max-width: 100%;}
 }
 @media only screen and (max-width:768px){
-  .page-betting-form .block.block-system form {width: 100%;}
+  .page-prediction-form .block.block-system form {width: 100%;}
   .main-container{padding-bottom: 40px;}
   .admin-menu section.col-sm-12 {width: 100%;}
   .page-payment-form #payment-form {max-width: 100%;}
