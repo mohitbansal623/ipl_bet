@@ -16,6 +16,10 @@
   font-weight: normal;
   font-style: normal;
 }
+
+body, html {
+  font-family: 'Open Sans', sans-serif;
+}
 /* ---- particles.js container ---- */
 /* line 2, ../sass/homepage.scss */
 .navbar.container {
@@ -116,7 +120,6 @@
   z-index: 1;
   border: 2px solid transparent;
   text-decoration: none;
-  font-family: demifont;
 }
 
 /* line 73, ../sass/homepage.scss */
@@ -163,7 +166,6 @@
   font-size: 4rem;
   text-transform: uppercase;
   margin-bottom: 50px;
-  font-family: boldfont;
 }
 
 /* line 106, ../sass/homepage.scss */
@@ -242,7 +244,6 @@
 /* line 147, ../sass/homepage.scss */
 .no-sidebars .btn {
   border-radius: 0;
-  font-family: demifont;
 }
 
 /* line 148, ../sass/homepage.scss */
@@ -329,8 +330,8 @@ header#navbar.navbar.container {
   font-size: 16px;
 }
 .logo img{max-height: 60px; border-radius: 100px;}
-nav, .name.navbar-brand{margin-top: 15px;font-family: normalfont;}
-body,html{font-family: normalfont;height:100%;}
+nav, .name.navbar-brand{margin-top: 15px;}
+body,html{height:100%;}
 .view.view-advertisements.view-id-advertisements.view-display-id-block {
     position: absolute;
     z-index: 9;
@@ -358,7 +359,6 @@ body,html{font-family: normalfont;height:100%;}
 }
 .views-field.views-field-title a {
     text-transform: uppercase;
-    font-family: boldfont;
     font-size: 12px;
 }
 .page-advertisements .views-exposed-widgets {
