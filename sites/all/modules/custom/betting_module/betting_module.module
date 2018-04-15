@@ -1119,7 +1119,7 @@ function betting_form13($form, &$form_state) {
    '#value' => 13, // Form ID
   );
 
-  $active = array('A' => $teamA, 'B' => $teamB);
+  $active = array('A' => 'Yes', 'B' => 'No');
   global $user;
   $user_id = $user->uid;
   $id = 13;
