@@ -127,7 +127,7 @@ global $user;
 <section class="banner">
   <div class="banner-block">
     <div class="banner-content">
-      <h2>
+      <h2 class="no-underline">
          Video Background option<span class="block">  One Page parallax</span>
       </h2>
       <a href="/list-of-matches" class="button default">Matches</a>
