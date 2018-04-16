@@ -182,7 +182,7 @@ global $user;
         <?php if (!empty($action_links)): ?>
           <ul class="action-links"><?php print render($action_links); ?></ul>
         <?php endif; ?>
-        <?php print render($page['content']); ?>
+        <?php //print render($page['content']); ?>
       </section>
 
       <?php if (!empty($page['sidebar_second'])): ?>
@@ -194,6 +194,9 @@ global $user;
     </div>
   </div>
 </div>
+
+<?php $output = views_embed_view('advertisements', 'block');
+          print render($output);?>
 
 
 <?php if (!empty($page['footer'])): ?>
