@@ -23,11 +23,14 @@ function betting_module_menu() {
 }
 
 function check_access() {
-  if (user_is_logged_in()) {
+  if (user_is_logged_in() && check_betting_time($_SESSION['nid'])) {
     return TRUE;
   }
+  elseif (!user_is_logged_in()) {
+    drupal_goto('/user/login');
+  }
 
-  drupal_goto('/user/login');
+  return FALSE;
 }
 
 function bet_form() {
@@ -160,12 +163,27 @@ function betting_module_form_alter(&$form, &$form_state, $form_id) {
     $form['field_form_id']['#access'] = FALSE;
     $form['title']['#access'] = FALSE;
     $form['title']['#default_value'] = 'Match';
+    $form['#validate'][] = 'custom_form_validate';
     if (isset($_SESSION['match_id']) && isset($_SESSION['form_id'])) {
       $title = get_title_for_which_bet_is_made($_SESSION['form_id']);
       $form['title']['#default_value'] = $title;
       $form['field_for_match']['und'][0]['value']['#default_value'] = $_SESSION['match_id'];
       $form['field_form_id']['und'][0]['value']['#default_value'] = $_SESSION['form_id'];
     }
+  }
+}
+
+function custom_form_validate($form, &$form_state) {
+  if ($form_state['values']['field_add_amount']['und'][0]['value'] < 10) {
+      form_set_error('field_add_amount', 'Amount must be greater than 10');
+  }
+
+  elseif ($form_state['values']['field_add_amount']['und'][0]['value'] % 10 != 0) {
+    form_set_error('field_add_amount', 'Amount must be in multiples of 10 and less than 10000');
+  }
+
+  elseif ($form_state['values']['field_add_amount']['und'][0]['value'] > 10000) {
+    form_set_error('field_add_amount', 'Amount must be in range 10-10000 and in multiples of 10');
   }
 }
 
