@@ -334,12 +334,45 @@ header#navbar.navbar.container {
 nav, .name.navbar-brand{margin-top: 15px;}
 body,html{height:100%;}
 .view.view-advertisements.view-id-advertisements.view-display-id-block {
-    position: absolute;
+    background: #000000 !important;
+    position: fixed;
+    width: 300px;
+    height: 200px;
     z-index: 9;
     right: 0;
     bottom: 0;
     background: #fff;
     padding: 15px;
+
+    .views-field-title {
+      text-align: center;
+      a {
+        font-size: 18px;
+        font-weight: bold;
+        color: white;
+      }
+    }
+
+    .views-field-field-shop-photos {
+      height: 160px;
+      @media screen and (max-width: 991px) {
+        width: 100%;
+      }
+
+      img {
+        width: 200px;
+        height: 140px;
+        margin-left: 35px;
+        padding: 5px;
+        @media screen and (max-width: 991px) {
+          margin: auto;
+        }
+      }
+    }
+
+    .slick-prev::before, .slick-next::before {
+      color: #ccc;
+    }
 }
 .views-exposed-widgets {
     margin-bottom: .5em;
@@ -473,6 +506,12 @@ body,html{height:100%;}
   .page-advertisements .views-exposed-widgets {flex-direction: column;}
   .views-exposed-form .views-exposed-widget {width: 100%;}
   .banner-content h2{font-size: 2rem;}
+}
+
+@media only screen and (max-width:991px){
+  .view.view-advertisements.view-id-advertisements.view-display-id-block {
+    width: 100%;
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {

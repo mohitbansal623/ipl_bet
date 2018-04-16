@@ -10,4 +10,14 @@ jQuery(document).ready(function(){
         jQuery(this).prop("checked", false);
       }
     });
+
+    if (jQuery('body.front .view-advertisements.view-display-id-block .view-content').length) {
+			jQuery('body.front .view-advertisements.view-display-id-block .view-content').slick({
+				infinite: true,
+				slidesToShow: 1,
+				arrows: true,
+        // dots: true,
+				slidesToScroll: 1
+			});
+		}
 });
