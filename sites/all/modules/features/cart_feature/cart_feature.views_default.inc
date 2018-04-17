@@ -143,8 +143,34 @@ echo "<a href=\'/payment-form\'> CheckOut </a>";
   $handler->display->display_options['header']['area_text_custom']['id'] = 'area_text_custom';
   $handler->display->display_options['header']['area_text_custom']['table'] = 'views';
   $handler->display->display_options['header']['area_text_custom']['field'] = 'area_text_custom';
-  $handler->display->display_options['header']['area_text_custom']['content'] = '<h2><a href="/betting-form">Back to Form</a></h2>';
+  $handler->display->display_options['header']['area_text_custom']['content'] = '<h2><a href="/prediction-form">Back to Form</a></h2>';
   $handler->display->display_options['path'] = 'cart';
+  $translatables['cart'] = array(
+    t('Master'),
+    t('Cart'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('author'),
+    t('Add Amount'),
+    t('Edit link'),
+    t('Edit'),
+    t('Delete link'),
+    t('Delete'),
+    t('All'),
+    t('Page'),
+    t('<h2><a href="/prediction-form">Back to Form</a></h2>'),
+  );
   $export['cart'] = $view;
 
   return $export;

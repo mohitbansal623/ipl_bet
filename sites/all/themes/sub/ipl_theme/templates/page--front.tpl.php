@@ -127,10 +127,15 @@ global $user;
 <section class="banner">
   <div class="banner-block">
     <div class="banner-content">
-      <h2>
+      <h2 class="no-underline">
          Video Background option<span class="block">  One Page parallax</span>
       </h2>
-      <a href="/list-of-matches" class="button default">Matches</a> &nbsp; <a href="/user" class="button whitehole">Login now</a>
+      <a href="/list-of-matches" class="button default">Matches</a>
+      <?php if ($user->uid == 0):?>
+      <a href="/user" class="button whitehole">Login now</a>
+      <?php else: ?>
+        <a href="/user/logout" class="button whitehole">Logout</a>
+      <?php endif; ?>
       </div>
   </div>
 </section>
@@ -177,7 +182,7 @@ global $user;
         <?php if (!empty($action_links)): ?>
           <ul class="action-links"><?php print render($action_links); ?></ul>
         <?php endif; ?>
-        <?php print render($page['content']); ?>
+        <?php //print render($page['content']); ?>
       </section>
 
       <?php if (!empty($page['sidebar_second'])): ?>
@@ -190,7 +195,9 @@ global $user;
   </div>
 </div>
 
-<?php $output = views_embed_view('advertisements', 'block'); print $output; ?>
+<?php $output = views_embed_view('advertisements', 'block');
+          print render($output);?>
+
 
 <?php if (!empty($page['footer'])): ?>
   <div class="site-footer">
