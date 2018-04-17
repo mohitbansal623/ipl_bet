@@ -342,28 +342,43 @@ body,html{height:100%;}
     right: 0;
     bottom: 0;
     background: #fff;
-    padding: 15px;
+
+    .slick-slider {
+      margin-bottom: 0px;
+      height: 100%;
+    }
+
+    .slick-list, .slick-track  {
+      height: 100%;
+    }
+
+    .slick-prev.slick-arrow, .slick-next.slick-arrow {
+      display: none !important;
+    }
+
+    .views-row {
+      position: relative;
+    }
 
     .views-field-title {
-      text-align: center;
-      a {
-        font-size: 18px;
-        font-weight: bold;
-        color: white;
-      }
+      position: absolute;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      text-shadow: 0 0 5px #000;
     }
 
     .views-field-field-shop-photos {
-      height: 160px;
+      height: 200px;
       @media screen and (max-width: 991px) {
         width: 100%;
       }
 
       img {
-        width: 200px;
-        height: 140px;
-        margin-left: 35px;
-        padding: 5px;
+        width: 100%;
+        height: 200px;
         @media screen and (max-width: 991px) {
           margin: auto;
         }
@@ -391,9 +406,11 @@ body,html{height:100%;}
 .views-exposed-widgets .views-exposed-form .views-exposed-widget .btn {
     margin-top: .8em;
 }
-.views-field.views-field-title a {
+.view-id-advertisements.view-display-id-block .views-field.views-field-title a {
     text-transform: uppercase;
-    font-size: 12px;
+    font-size: 25px;
+    color: white;
+    font-weight: bold;
 }
 .page-advertisements, .page-cart, .page-users-info, .page-admin-interface, .page-users-match-info  {
   .views-exposed-widgets {
@@ -489,6 +506,60 @@ body,html{height:100%;}
 .node-type-ads .field.field-name-field-shop-photos .field-items .field-item{margin-right: 10px;}
 .page-node-add-add-to-cart div.vertical-tabs.clearfix {display: none;}
 
+.logged-in .profile {
+   display: flex;
+   flex-wrap: wrap;
+   box-shadow: 0 0 5px #ccc;
+   padding: 15px;
+}
+
+.logged-in .profile .user-picture {
+   width: 100%;
+   margin-bottom: 10px;
+   display: block;
+   text-align: center;
+}
+
+.logged-in .profile .field {
+   width: 33%;
+   margin-bottom:  10px;
+}
+
+.logged-in .profile h3 {
+   width: 100%;
+}
+
+.logged-in .profile dl {
+   width: 33%;
+}
+
+.logged-in .profile .user-picture img.img-responsive {
+   display: inline-block;
+   max-width: 200px;
+   width: 100%;
+}
+
+.node-type-ipl-matches article {
+   display: flex;
+   flex-wrap: wrap;
+}
+
+.node-type-ipl-matches article .field {
+   width: 12%;
+   margin: 10px;
+}
+
+.node-type-ipl-matches article .field.field-name-field-top-batsman-of-team-a, .node-type-ipl-matches article .field.field-name-field-top-batsman-of-team-b, .node-type-ipl-matches article .field.field-name-field-top-bowler-of-team-a, .node-type-ipl-matches article .field.field-name-field-top-bowler-of-team-b {
+   width: 23%;
+   margin-top: 30px;
+}
+
+.node-type-ipl-matches article .field img.img-responsive {
+   max-height: 60px;
+   width: auto;
+   margin: 5px 0;
+}
+
 @media only screen and (max-width:990px){
   .page-user section.col-sm-12 {max-width: 100%;}
 }
@@ -506,6 +577,24 @@ body,html{height:100%;}
   .page-advertisements .views-exposed-widgets {flex-direction: column;}
   .views-exposed-form .views-exposed-widget {width: 100%;}
   .banner-content h2{font-size: 2rem;}
+  .logged-in .profile .field {
+    width: 100%;
+  }
+
+  .banner-block {
+    max-width: 95%;
+  }
+
+  .node-type-ipl-matches article .field {
+    width: 100%;
+  }
+
+  .node-type-ipl-matches article .field.field-name-field-top-batsman-of-team-a, .node-type-ipl-matches article .field.field-name-field-top-batsman-of-team-b, .node-type-ipl-matches article .field.field-name-field-top-bowler-of-team-a, .node-type-ipl-matches article .field.field-name-field-top-bowler-of-team-b {
+    width: 100%;
+  }
+  .page-container.fixed-page > .banner {
+    position: relative;
+  }
 }
 
 @media only screen and (max-width:991px){
@@ -530,3 +619,4 @@ h1, h2, h3, h4, h5, h6 {
     }
   }
 }
+

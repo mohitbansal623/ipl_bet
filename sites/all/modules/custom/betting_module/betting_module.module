@@ -5,7 +5,7 @@
  */
 
 function betting_module_menu() {
-  $items['prediction-form'] = array(
+  $items['prediction-form/%'] = array(
     'title' => 'Prediction Form',
     'page callback' => 'bet_form',
     'type' => MENU_CALLBACK,
@@ -34,6 +34,17 @@ function check_access() {
 }
 
 function bet_form() {
+  $nid = arg(1);
+  $renderable_form = array();
+  if (is_numeric($nid) && !empty($nid)) {
+    $_SESSION['nid'] = $nid;
+  }
+  else {
+    drupal_set_message(t("Access denied"), 'warning');
+
+    return $renderable_form;
+  }
+
   $renderable_form[0] = drupal_get_form('betting_form');
   $renderable_form[1] =  drupal_get_form('betting_form2');
   $renderable_form[2] =  drupal_get_form('betting_form3');
