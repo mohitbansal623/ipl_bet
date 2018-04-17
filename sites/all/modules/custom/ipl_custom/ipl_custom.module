@@ -1,8 +1,18 @@
 <?php
 
 function ipl_custom_form_alter(&$form, &$form_state, $form_id) {
-  if ($form_id == 'ipl_matches_node_form') {
-    // dpm($form);
+  if ($form_id == 'confirm_payment_node_form') {
+    global $user;
+    $uid = $user->uid;
+    $data = user_load($uid);
+    $form['field_total_amount']['#access'] = FALSE;
+    $form['field_match_id']['#access'] = FALSE;
+    $form['title']['#access'] = FALSE;
+    $form['title']['#default_value'] = 'confirm-payment-' . $data->name;
+    if (isset($_SESSION['nid']) && isset($_SESSION['amount'])) {
+      $form['field_total_amount']['und'][0]['value']['#default_value'] = $_SESSION['amount'];
+      $form['field_match_id']['und'][0]['value']['#default_value'] = $_SESSION['nid'];
+    }
   }
 }
 
@@ -11,7 +21,7 @@ function ipl_custom_form_alter(&$form, &$form_state, $form_id) {
  * Implements hook_menu().
  */
 function ipl_custom_menu() {
-  $items['payment-form'] = array(
+  $items['payment-form/%'] = array(
     'page callback' => 'payment_gateway',
     'type' => MENU_CALLBACK,
     'access callback' => array('check_access_user'),
@@ -233,6 +243,17 @@ function custom_match_configuration($form, &$form_state) {
 }
 
 function payment_gateway() {
+  $amount = arg(1);
+  $renderable_form = array();
+  if (is_numeric($amount) && !empty($amount)) {
+    $_SESSION['amount'] = $amount;
+  }
+  else {
+    drupal_set_message(t("Access denied"), 'warning');
+
+    return $renderable_form;
+  }
+
   $renderable_form = drupal_get_form('payment_form');
 
   return $renderable_form;
@@ -242,7 +263,6 @@ function payment_gateway() {
 function payment_form($form, &$form_state) {
 
   drupal_add_js(drupal_get_path('module', 'ipl_custom') .'/ipl_form.js', 'file');
-  $amount = isset($_SESSION['amount']) ? $_SESSION['amount'] : 0;
   global $user;
   $user_details = user_load($user->uid);
 
@@ -276,7 +296,7 @@ function payment_form($form, &$form_state) {
       '#type' => 'textfield',
       '#title' => t('Amount'),
       '#required' => TRUE,
-      '#default_value' => $amount,
+      '#default_value' => $_SESSION['amount'],
       '#element_validate' => array('element_validate_integer_positive'),
     );
 
@@ -351,6 +371,8 @@ function payment_form_submit($form, &$form_state) {
 
   $amount = $form_state['values']['max_payu_user_amount'];
   $amount = number_format((float)$amount, 2, '.', '');
+
+  drupal_goto('node/add/confirm-payment');
 
   if ($amount <= 1000) {
     $salt = variable_get('max_payu_salt', 'eCwWELxi');
