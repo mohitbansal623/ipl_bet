@@ -88,6 +88,10 @@ function confirm_payment_feature_views_default_views() {
       'empty_column' => 0,
     ),
   );
+  /* Relationship: Content: Author */
+  $handler->display->display_options['relationships']['uid']['id'] = 'uid';
+  $handler->display->display_options['relationships']['uid']['table'] = 'node';
+  $handler->display->display_options['relationships']['uid']['field'] = 'uid';
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
@@ -101,8 +105,8 @@ function confirm_payment_feature_views_default_views() {
   $handler->display->display_options['fields']['field_upload_confirmation_image']['field'] = 'field_upload_confirmation_image';
   $handler->display->display_options['fields']['field_upload_confirmation_image']['click_sort_column'] = 'fid';
   $handler->display->display_options['fields']['field_upload_confirmation_image']['settings'] = array(
-    'image_style' => 'large',
-    'image_link' => '',
+    'image_style' => 'medium',
+    'image_link' => 'file',
   );
   /* Field: Content: Paytm  Number */
   $handler->display->display_options['fields']['field_paytm_number']['id'] = 'field_paytm_number';
@@ -120,6 +124,44 @@ function confirm_payment_feature_views_default_views() {
   $handler->display->display_options['fields']['field_phone_pay_number']['id'] = 'field_phone_pay_number';
   $handler->display->display_options['fields']['field_phone_pay_number']['table'] = 'field_data_field_phone_pay_number';
   $handler->display->display_options['fields']['field_phone_pay_number']['field'] = 'field_phone_pay_number';
+  /* Field: Content: Nid */
+  $handler->display->display_options['fields']['nid']['id'] = 'nid';
+  $handler->display->display_options['fields']['nid']['table'] = 'node';
+  $handler->display->display_options['fields']['nid']['field'] = 'nid';
+  $handler->display->display_options['fields']['nid']['exclude'] = TRUE;
+  /* Field: Content: Match ID */
+  $handler->display->display_options['fields']['field_match_id']['id'] = 'field_match_id';
+  $handler->display->display_options['fields']['field_match_id']['table'] = 'field_data_field_match_id';
+  $handler->display->display_options['fields']['field_match_id']['field'] = 'field_match_id';
+  $handler->display->display_options['fields']['field_match_id']['settings'] = array(
+    'thousand_separator' => '',
+    'prefix_suffix' => 1,
+  );
+  /* Field: User: Uid */
+  $handler->display->display_options['fields']['uid']['id'] = 'uid';
+  $handler->display->display_options['fields']['uid']['table'] = 'users';
+  $handler->display->display_options['fields']['uid']['field'] = 'uid';
+  $handler->display->display_options['fields']['uid']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['uid']['link_to_user'] = FALSE;
+  /* Field: Global: PHP */
+  $handler->display->display_options['fields']['php']['id'] = 'php';
+  $handler->display->display_options['fields']['php']['table'] = 'views';
+  $handler->display->display_options['fields']['php']['field'] = 'php';
+  $handler->display->display_options['fields']['php']['label'] = 'Status';
+  $handler->display->display_options['fields']['php']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php']['php_output'] = '<?php
+$status = check_status_payment($row->nid);
+if ($status == 0) {
+ $match_id = $data->field_field_match_id[0][\'raw\'][\'value\'];
+ echo "<a href=\'/accept-payment/$row->nid/$row->uid/$match_id\'> Accept</a>";
+}
+elseif ($status == 1) {
+  echo "<p>Payment  Confirmed</p>";
+}
+
+?>';
+  $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
