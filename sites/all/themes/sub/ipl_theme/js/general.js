@@ -20,4 +20,6 @@ jQuery(document).ready(function(){
 				slidesToScroll: 1
 			});
 		}
+
+    jQuery('.form-item-max-payu-user-amount #edit-max-payu-user-amount').prop("disabled", true);
 });
