@@ -23,7 +23,7 @@ function betting_module_menu() {
 }
 
 function check_access() {
-  if (user_is_logged_in() && check_betting_time($_SESSION['nid'])) {
+  if (user_is_logged_in()) {
     return TRUE;
   }
   elseif (!user_is_logged_in()) {
@@ -224,7 +224,7 @@ function check_whether_user_has_already_added_in_cart($nid, $form_id, $uid) {
   $query->join('field_data_field_form_id', 'f', "at.nid = f.entity_id");
   $query->condition('at.uid', $uid);
   $query->condition('at.type', 'add_to_cart');
-  $query->condition('at.status', 1);
+  // $query->condition('at.status', 1);
   $query->condition('f.field_form_id_value', $form_id);
   $query->condition('m.field_for_match_value', $nid);
   $data = $query->execute()->rowCount();
