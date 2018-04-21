@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Final Results and Admin Interface Feature feature.
+ */
+
+include_once 'final_results_and_admin_interface_feature.features.inc';
