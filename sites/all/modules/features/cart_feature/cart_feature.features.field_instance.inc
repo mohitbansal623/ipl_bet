@@ -15,14 +15,19 @@ function cart_feature_field_default_field_instances() {
     'bundle' => 'add_to_cart',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Amount must be in multiple of 10',
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
-        'settings' => array(),
-        'type' => 'list_default',
-        'weight' => 0,
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 3,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -36,14 +41,18 @@ function cart_feature_field_default_field_instances() {
     'label' => 'Add Amount',
     'required' => 1,
     'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => 1,
-      'module' => 'options',
+      'active' => 0,
+      'module' => 'number',
       'settings' => array(),
-      'type' => 'options_select',
-      'weight' => -4,
+      'type' => 'number',
+      'weight' => 1,
     ),
   );
 
@@ -83,7 +92,7 @@ function cart_feature_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => -3,
+      'weight' => 2,
     ),
   );
 
@@ -123,13 +132,14 @@ function cart_feature_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => -2,
+      'weight' => 3,
     ),
   );
 
   // Translatables
   // Included for use with string extractors like potx.
   t('Add Amount');
+  t('Amount must be in multiple of 10');
   t('For Match');
   t('Form ID');
 

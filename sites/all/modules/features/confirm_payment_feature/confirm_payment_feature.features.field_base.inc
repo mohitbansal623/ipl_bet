@@ -59,10 +59,19 @@ function confirm_payment_feature_field_default_field_bases() {
     'settings' => array(
       'markup' => array(
         'format' => 'full_html',
-        'value' => 'Paytm number - 7222816099
+        'value' => '<h3>Paytm number - 7222816099
 Tez  number -   8058234558.
 Bhim  number -   8058234558.
-Phone pay number -   8058234558.',
+Phone pay number -   8058234558.</h3>
+
+<b>After uploading a confirmation image, this image will be verified by admin. You will receive a message after some time regarding this. Check your message section.
+
+Pay Now via Paytm 
+
+<a href="http://p-y.tm/z5OdS8CL9">Click here</a>
+
+
+ ',
       ),
     ),
     'translatable' => 0,

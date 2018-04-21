@@ -3,6 +3,7 @@ core = 7.x
 package = Features
 dependencies[] = features
 dependencies[] = list
+dependencies[] = number
 dependencies[] = text
 dependencies[] = views
 features[ctools][] = views:views_default:3.0
