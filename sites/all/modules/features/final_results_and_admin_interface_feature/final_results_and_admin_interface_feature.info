@@ -1,0 +1,10 @@
+name = Final Results and Admin Interface Feature
+core = 7.x
+package = Features
+dependencies[] = views
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[views_view][] = admin_interface
+features[views_view][] = final_results
+features[views_view][] = thank_you_for_participation
+features_exclude[dependencies][ctools] = ctools
