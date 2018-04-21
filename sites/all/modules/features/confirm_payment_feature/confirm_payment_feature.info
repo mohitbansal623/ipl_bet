@@ -19,6 +19,7 @@ features[field_base][] = field_phone_pay_number
 features[field_base][] = field_tez_number
 features[field_base][] = field_total_amount
 features[field_base][] = field_upload_confirmation_image
+features[field_group][] = group_owner_payment_numbers|node|confirm_payment|form
 features[field_group][] = group_payment_numbers|node|confirm_payment|form
 features[field_instance][] = node-confirm_payment-field_bhim_number
 features[field_instance][] = node-confirm_payment-field_match_id

@@ -871,6 +871,7 @@ function get_final_results() {
       }
 
         $final_result[$key] = final_calculation($form_id, $current_match_id, $final_ans, $form_name);
+  //break;
   }
  }
   return  $final_result;
@@ -905,6 +906,25 @@ function get_total_amount($form_id = NULL , $match_id = NULL, $uid = NULL) {
   if (!empty($uid)) {
     $query->condition('n.uid', $uid);
   }
+  $results = $query->execute()->fetchCol();
+  $total_amount = !empty($results) ? array_sum($results): 0;
+  $discount = (10 * $total_amount)/ 100;
+  $total_amount = $total_amount - $discount;
+
+  return  $total_amount;
+}
+
+function get_actual_amount($form_id = NULL , $match_id = NULL) {
+  $query = db_select('node', 'n')
+    -> fields('am', array('field_add_amount_value'));
+  $query-> join ('field_data_field_add_amount', 'am', "am.entity_id = n.nid");
+  $query-> join ('field_data_field_form_id', 'f', "f.entity_id = n.nid");
+  $query-> join ('field_data_field_for_match', 'ma', "ma.entity_id = n.nid");
+  if (!empty($form_id)) {
+  $query->condition('f.field_form_id_value', $form_id);
+  }
+
+  $query->condition('ma.field_for_match_value', $match_id);
   $results = $query->execute()->fetchCol();
   $total_amount = !empty($results) ? array_sum($results): 0;
 
@@ -962,6 +982,7 @@ $query = db_select('node', 'n')
   $results = $query->execute()->fetchCol();
   $total_amount[$key]['amount'] = !empty($results) ? array_sum($results): 0;
   $total_amount[$key]['uid'] = $value;
+
 $sum += $total_amount[$key]['amount'];
 }
 
@@ -984,4 +1005,34 @@ $user_win_amount[$key +1 ]['amount_match'] = $get_total_for_this_match;
 $user_win_amount[$key +1 ]['point_name'] = $form_name;
 
 return $user_win_amount;
+}
+
+
+function get_amount_for_specific_point($form_id, $match_id, $uid) {
+  $query = db_select('node', 'n')
+    -> fields('am', array('field_add_amount_value'));
+  $query-> join ('field_data_field_add_amount', 'am', "am.entity_id = n.nid");
+  $query-> join ('field_data_field_form_id', 'f', "f.entity_id = n.nid");
+  $query-> join ('field_data_field_for_match', 'ma', "ma.entity_id = n.nid");
+  $query->condition('f.field_form_id_value', $form_id);
+  $query->condition('ma.field_for_match_value', $match_id);
+  $query->condition('n.uid', $uid);
+  $results = $query->execute()->fetchCol();
+  $total_amount = !empty($results) ? $results[0]: 0;
+
+  return $total_amount;
+}
+
+
+function get_match_info($nid) {
+  $node = node_load($nid);
+
+  $match = array();
+  $match['title'] = $node->title;
+  $match['team_a'] = $node->field_team_a['und'][0]['value'];
+  $match['team_b'] = $node->field_team_b['und'][0]['value'];
+  $match['date'] = $node->field_match_date['und'][0]['value'];
+  $match['location'] = $node->field_match_location['und'][0]['value'];
+
+  return $match;
 }

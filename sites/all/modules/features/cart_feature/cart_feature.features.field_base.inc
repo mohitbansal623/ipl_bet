@@ -17,27 +17,12 @@ function cart_feature_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_add_amount',
-    'indexes' => array(
-      'value' => array(
-        0 => 'value',
-      ),
-    ),
+    'indexes' => array(),
     'locked' => 0,
-    'module' => 'list',
-    'settings' => array(
-      'allowed_values' => array(
-        10 => 10,
-        20 => 20,
-        30 => 30,
-        50 => 50,
-        100 => 100,
-        500 => 500,
-        1000 => 1000,
-      ),
-      'allowed_values_function' => '',
-    ),
+    'module' => 'number',
+    'settings' => array(),
     'translatable' => 0,
-    'type' => 'list_text',
+    'type' => 'number_integer',
   );
 
   // Exported field_base: 'field_for_match'.

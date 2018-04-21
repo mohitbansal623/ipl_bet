@@ -33,15 +33,29 @@ function confirm_payment_feature_views_default_views() {
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'full';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '10';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '100';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
+  $handler->display->display_options['pager']['options']['id'] = '0';
+  $handler->display->display_options['pager']['options']['quantity'] = '9';
   $handler->display->display_options['style_plugin'] = 'table';
+  $handler->display->display_options['style_options']['grouping'] = array(
+    0 => array(
+      'field' => 'field_match_id',
+      'rendered' => 1,
+      'rendered_strip' => 0,
+    ),
+  );
   $handler->display->display_options['style_options']['columns'] = array(
     'title' => 'title',
     'field_upload_confirmation_image' => 'field_upload_confirmation_image',
-    'field_bhim_number' => 'field_bhim_number',
     'field_paytm_number' => 'field_paytm_number',
-    'field_phone_pay_number' => 'field_phone_pay_number',
     'field_tez_number' => 'field_tez_number',
+    'field_bhim_number' => 'field_bhim_number',
+    'field_phone_pay_number' => 'field_phone_pay_number',
+    'nid' => 'nid',
+    'field_match_id' => 'field_match_id',
+    'uid' => 'uid',
+    'php' => 'php',
   );
   $handler->display->display_options['style_options']['default'] = '-1';
   $handler->display->display_options['style_options']['info'] = array(
@@ -59,14 +73,21 @@ function confirm_payment_feature_views_default_views() {
       'separator' => '',
       'empty_column' => 0,
     ),
-    'field_bhim_number' => array(
+    'field_paytm_number' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
-    'field_paytm_number' => array(
+    'field_tez_number' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_bhim_number' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -80,9 +101,28 @@ function confirm_payment_feature_views_default_views() {
       'separator' => '',
       'empty_column' => 0,
     ),
-    'field_tez_number' => array(
+    'nid' => array(
       'sortable' => 0,
       'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_match_id' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'uid' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'php' => array(
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
@@ -133,6 +173,7 @@ function confirm_payment_feature_views_default_views() {
   $handler->display->display_options['fields']['field_match_id']['id'] = 'field_match_id';
   $handler->display->display_options['fields']['field_match_id']['table'] = 'field_data_field_match_id';
   $handler->display->display_options['fields']['field_match_id']['field'] = 'field_match_id';
+  $handler->display->display_options['fields']['field_match_id']['exclude'] = TRUE;
   $handler->display->display_options['fields']['field_match_id']['settings'] = array(
     'thousand_separator' => '',
     'prefix_suffix' => 1,
@@ -142,6 +183,7 @@ function confirm_payment_feature_views_default_views() {
   $handler->display->display_options['fields']['uid']['table'] = 'users';
   $handler->display->display_options['fields']['uid']['field'] = 'uid';
   $handler->display->display_options['fields']['uid']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['uid']['exclude'] = TRUE;
   $handler->display->display_options['fields']['uid']['link_to_user'] = FALSE;
   /* Field: Global: PHP */
   $handler->display->display_options['fields']['php']['id'] = 'php';
@@ -178,6 +220,34 @@ elseif ($status == 1) {
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['path'] = 'confirm-payment';
+  $translatables['confirm_payment'] = array(
+    t('Master'),
+    t('confirm-payment'),
+    t('more'),
+    t('Apply'),
+    t('Reset'),
+    t('Sort by'),
+    t('Asc'),
+    t('Desc'),
+    t('Items per page'),
+    t('- All -'),
+    t('Offset'),
+    t('« first'),
+    t('‹ previous'),
+    t('next ›'),
+    t('last »'),
+    t('author'),
+    t('Upload Confirmation image of Payment'),
+    t('Paytm  Number'),
+    t('Tez Number'),
+    t('Bhim Number'),
+    t('Phone Pay Number'),
+    t('Nid'),
+    t('Match ID'),
+    t('Uid'),
+    t('Status'),
+    t('Page'),
+  );
   $export['confirm_payment'] = $view;
 
   return $export;
