@@ -10,9 +10,9 @@ function ipl_theme_preprocess_page(&$variables) {
     drupal_add_css($path . '/stylesheets/homepage.css');
 
   if (drupal_is_front_page()) {
-    drupal_add_css(libraries_get_path('slick') . '/slick/slick.css', 'file');
-    drupal_add_css(libraries_get_path('slick') . '/slick/slick-theme.css', 'file');
-    drupal_add_css(libraries_get_path('slick') . '/slick/slick.theme.css', 'file');
-    drupal_add_js(libraries_get_path('slick') . '/slick/slick.min.js', 'file');
+    // drupal_add_css(libraries_get_path('slick') . '/slick/slick.css', 'file');
+    // drupal_add_css(libraries_get_path('slick') . '/slick/slick-theme.css', 'file');
+    // drupal_add_css(libraries_get_path('slick') . '/slick/slick.theme.css', 'file');
+    // drupal_add_js(libraries_get_path('slick') . '/slick/slick.min.js', 'file');
   }
 }
