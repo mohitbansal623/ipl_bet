@@ -898,6 +898,7 @@ function get_total_amount($form_id = NULL , $match_id = NULL, $uid = NULL) {
   $query-> join ('field_data_field_add_amount', 'am', "am.entity_id = n.nid");
   $query-> join ('field_data_field_form_id', 'f', "f.entity_id = n.nid");
   $query-> join ('field_data_field_for_match', 'ma', "ma.entity_id = n.nid");
+  $query->condition('n.status', 1);
   if (!empty($form_id)) {
   $query->condition('f.field_form_id_value', $form_id);
   }
@@ -920,6 +921,7 @@ function get_actual_amount($form_id = NULL , $match_id = NULL) {
   $query-> join ('field_data_field_add_amount', 'am', "am.entity_id = n.nid");
   $query-> join ('field_data_field_form_id', 'f', "f.entity_id = n.nid");
   $query-> join ('field_data_field_for_match', 'ma', "ma.entity_id = n.nid");
+  $query->condition('n.status', 1);
   if (!empty($form_id)) {
   $query->condition('f.field_form_id_value', $form_id);
   }
@@ -965,12 +967,14 @@ function final_calculation($form_id, $current_match_id, $final_ans, $form_name) 
 $total = get_total_amount($form_id, $current_match_id);
 $uids = get_data_for_users_win($form_id, $current_match_id, $final_ans);
 $sum = 0;
+$total_amount = array();
 foreach ($uids as $key => $value) {
 $query = db_select('node', 'n')
     -> fields('am', array('field_add_amount_value'));
   $query-> join ('field_data_field_add_amount', 'am', "am.entity_id = n.nid");
   $query-> join ('field_data_field_form_id', 'f', "f.entity_id = n.nid");
   $query-> join ('field_data_field_for_match', 'ma', "ma.entity_id = n.nid");
+  $query-> condition('n.status', 1);
   if (!empty($form_id)) {
   $query->condition('f.field_form_id_value', $form_id);
   }
@@ -989,20 +993,32 @@ $sum += $total_amount[$key]['amount'];
 //$total = $total / 10;
 $total_user_win = $sum / 10;
 
-
+if ($total_user_win != 0) {
 $each_user = floor($total / $total_user_win);
+}
+else {
+$each_user = 0;
+}
 
+if (!empty($total_amount)) {
 
 foreach ($total_amount as $key => $value) {
   $user_win_amount[$key]['win'] = ($value['amount'] * $each_user) / 10;
   $user_win_amount[$key]['uid'] = $value['uid'];
 }
+}
 
-$get_total_for_this_point = get_total_amount($form_id, $current_match_id, $uid = NULL);
-$get_total_for_this_match = get_total_amount($form_id = NULL, $current_match_id, $uid = NULL);
+$get_total_for_this_point = get_total_amount($form_id, $current_match_id, NULL);
+$get_total_for_this_match = get_total_amount(NULL, $current_match_id, NULL);
+$get_total_users_played_point = get_users_who_played_in_match($form_id, $current_match_id);
+$total_users_win = get_count_for_users_win($form_id, $current_match_id, $final_ans);
+$total_users_lost = $get_total_users_played_point - $total_users_win;
 $user_win_amount[$key + 1]['amount_point'] = $get_total_for_this_point;
 $user_win_amount[$key +1 ]['amount_match'] = $get_total_for_this_match;
 $user_win_amount[$key +1 ]['point_name'] = $form_name;
+$user_win_amount[$key +1 ]['total_users_point'] = $get_total_users_played_point;
+$user_win_amount[$key +1 ]['total_users_win'] = $total_users_win;
+$user_win_amount[$key +1 ]['total_users_lost'] = $total_users_lost;
 
 return $user_win_amount;
 }
@@ -1016,6 +1032,7 @@ function get_amount_for_specific_point($form_id, $match_id, $uid) {
   $query-> join ('field_data_field_for_match', 'ma', "ma.entity_id = n.nid");
   $query->condition('f.field_form_id_value', $form_id);
   $query->condition('ma.field_for_match_value', $match_id);
+  $query->condition('n.status', 1);
   $query->condition('n.uid', $uid);
   $results = $query->execute()->fetchCol();
   $total_amount = !empty($results) ? $results[0]: 0;
@@ -1037,7 +1054,6 @@ function get_match_info($nid) {
   return $match;
 }
 
-
 function get_users_who_played_in_match($form_id = NULL, $match_id = NULL) {
   $query = db_select('node', 'n')
     -> fields('n', array('uid'));
@@ -1050,7 +1066,38 @@ function get_users_who_played_in_match($form_id = NULL, $match_id = NULL) {
   $query->condition('n.status', 1);
   $query->groupBy('n.uid');
   $query->condition('ma.field_for_match_value' , $match_id);
-  $results = $query->execute()->fetchCol();
+  $results = $query->execute()->rowCount();
 
+  return $results;
+}
+
+function get_count_for_users_win($form_id, $current_match_id, $final_ans) {
+
+  $query = db_select("betting", "b")
+    -> fields('b', array('uid'));
+  $query->condition("b.form_id", $form_id);
+  $query->condition('b.select_value', $final_ans);
+  $query->condition('b.nid', $current_match_id);
+  $query->groupBy('b.uid');
+  $results = $query->execute()->rowCount();
+  $users_uid = $query->execute()->fetchCol();
+  watchdog("usersuid", print_r($users_uid, TRUE));
+  if (!empty($users_uid)) {
+  $query = db_select('node', 'n')
+    -> fields('n', array('uid'));
+  $query-> join ('field_data_field_add_amount', 'am', "am.entity_id = n.nid");
+  $query-> join ('field_data_field_form_id', 'f', "f.entity_id = n.nid");
+  $query-> join ('field_data_field_for_match', 'ma', "ma.entity_id = n.nid");
+  if (!empty($form_id)) {
+    $query->condition('f.field_form_id_value', $form_id);
+  }
+  $query->condition('n.status', 1);
+  $query->condition('n.uid', $users_uid, 'IN');
+  $query->groupBy('n.uid');
+  $query->condition('ma.field_for_match_value' , $current_match_id);
+  $count_users = $query->execute()->rowCount();
+   watchdog("usersuid", print_r($count_users, TRUE));
+   return $count_users;
+ }
   return $results;
 }
