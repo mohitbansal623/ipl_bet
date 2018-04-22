@@ -5,25 +5,36 @@ $_SESSION['nid'] = 2;
  */
 
 function betting_module_menu() {
-  $items['prediction-form'] = array(
+  $items['prediction-form/%'] = array(
     'title' => 'Prediction Form',
     'page callback' => 'bet_form',
     'type' => MENU_CALLBACK,
-    'access callback' => 'check_access',
+    'access callback' => array('access_callback_function'),
   );
 
   $items['pay-form'] = array(
     'title' => 'Pay Form',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('pay_form'),
-    'access callback' => 'check_access',
+    'access callback' => array('access_callback_function'),
   );
 
   return $items;
 }
 
-function check_access() {
-  if (user_is_logged_in() && check_betting_time($_SESSION['nid'])) {
+function access_callback_function() {
+   $path = drupal_get_path_alias();
+   $patterns = 'ad/*';
+    if (user_is_logged_in() || $path == 'how-to-play'|| drupal_match_path($path, $patterns)) {
+    return TRUE;
+  }
+  elseif (!user_is_logged_in()) {
+   drupal_goto('/user/login');
+  }
+}
+
+function get_access() {
+  if (user_is_logged_in()) {
     return TRUE;
   }
   elseif (!user_is_logged_in()) {
@@ -34,6 +45,17 @@ function check_access() {
 }
 
 function bet_form() {
+  $nid = arg(1);
+  $renderable_form = array();
+  if (is_numeric($nid) && !empty($nid)) {
+    $_SESSION['nid'] = $nid;
+  }
+  else {
+    drupal_set_message(t("Access denied"), 'warning');
+
+    return $renderable_form;
+  }
+
   $renderable_form[0] = drupal_get_form('betting_form');
   $renderable_form[1] =  drupal_get_form('betting_form2');
   $renderable_form[2] =  drupal_get_form('betting_form3');
@@ -196,8 +218,8 @@ function get_title_for_which_bet_is_made($form_id) {
 
 function check_direct_come() {
   if (isset($_SESSION['match_id']) && isset($_SESSION['form_id'])) {
-    unset($_SESSION['match_id']);
-    unset($_SESSION['form_id']);
+    //unset($_SESSION['match_id']);
+    //unset($_SESSION['form_id']);
   }
 
   else {
@@ -213,7 +235,7 @@ function check_whether_user_has_already_added_in_cart($nid, $form_id, $uid) {
   $query->join('field_data_field_form_id', 'f', "at.nid = f.entity_id");
   $query->condition('at.uid', $uid);
   $query->condition('at.type', 'add_to_cart');
-  $query->condition('at.status', 1);
+  //$query->condition('at.status', 1);
   $query->condition('f.field_form_id_value', $form_id);
   $query->condition('m.field_for_match_value', $nid);
   $data = $query->execute()->rowCount();
@@ -1117,7 +1139,7 @@ function betting_form13($form, &$form_state) {
   if (!empty($node)) {
     $teamA = isset($node->field_team_a['und'][0]['value'])? $node->field_team_a['und'][0]['value']: NULL;
     $teamB = isset($node->field_team_b['und'][0]['value'])? $node->field_team_b['und'][0]['value']: NULL;
-    $teamC = 'Tie';
+    $teamC = 'Both Teams';
   }
 
   else {
@@ -1137,7 +1159,7 @@ function betting_form13($form, &$form_state) {
    '#value' => 13, // Form ID
   );
 
-  $active = array('A' => 'Yes', 'B' => 'No');
+  $active = array('A' => "Player score 50 from " . $teamA, 'B' => "Player score 50 from " .$teamB, 'C' => $teamC, 'D' => 'None of the above');
   global $user;
   $user_id = $user->uid;
   $id = 13;
@@ -1267,14 +1289,14 @@ function betting_form15($form, &$form_state) {
   $user_id = $user->uid;
   $id = 15;
   $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
-  $default_value = isset($markAnswer) ? $markAnswer : array();
-  if (!empty($default_value)) {
-    $default_value = str_split ( $default_value );
-  }
+  $default_value = isset($markAnswer) ? $markAnswer : NULL;
+  // if (!empty($default_value)) {
+  //   $default_value = str_split ( $default_value );
+  // }
 
 
   $form['top_batsman_team_a']['options'] = array(
-    '#type' => 'checkboxes',
+    '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
     '#default_value' => $default_value,
@@ -1300,7 +1322,7 @@ function save_top_batsman_team_a($form, &$form_state) {
   $form_id = isset($form_state['complete form']['top_batsman_team_a']['form_id']['#value']) ? $form_state['complete form']['top_batsman_team_a']['form_id']['#value']: NULL;
   $option = isset($form_state['complete form']['top_batsman_team_a']['options']['#value'])? $form_state['complete form']['top_batsman_team_a']['options']['#value']: NULL;
 
-  $option = implode("",$option);
+  // $option = implode("",$option);
   set_session_and_redirect_user($nid, $form_id, $uid, $option);
 }
 
@@ -1343,14 +1365,14 @@ function betting_form16($form, &$form_state) {
   $user_id = $user->uid;
   $id = 16;
   $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
-  $default_value = isset($markAnswer) ? $markAnswer : array();
-  if (!empty($default_value)) {
-    $default_value = str_split ( $default_value );
-  }
+  $default_value = isset($markAnswer) ? $markAnswer : NULL;
+  // if (!empty($default_value)) {
+  //   $default_value = str_split ( $default_value );
+  // }
 
 
   $form['top_batsman_team_b']['options'] = array(
-    '#type' => 'checkboxes',
+    '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
     '#default_value' => $default_value,
@@ -1375,7 +1397,7 @@ function save_top_batsman_team_b($form, &$form_state) {
   $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
   $form_id = isset($form_state['complete form']['top_batsman_team_b']['form_id']['#value']) ? $form_state['complete form']['top_batsman_team_b']['form_id']['#value']: NULL;
   $option = isset($form_state['complete form']['top_batsman_team_b']['options']['#value'])? $form_state['complete form']['top_batsman_team_b']['options']['#value']: NULL;
-  $option = implode("",$option);
+  // $option = implode("",$option);
   set_session_and_redirect_user($nid, $form_id, $uid, $option);
 }
 
@@ -1418,14 +1440,14 @@ function betting_form17($form, &$form_state) {
   $user_id = $user->uid;
   $id = 17;
   $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
-  $default_value = isset($markAnswer) ? $markAnswer : array();
-  if (!empty($default_value)) {
-    $default_value = str_split ( $default_value );
-  }
+  $default_value = isset($markAnswer) ? $markAnswer : NULL;
+  // if (!empty($default_value)) {
+  //   $default_value = str_split ( $default_value );
+  // }
 
 
   $form['top_bowler_team_a']['options'] = array(
-    '#type' => 'checkboxes',
+    '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
     '#default_value' => $default_value,
@@ -1450,7 +1472,7 @@ function save_top_bowler_team_a($form, &$form_state) {
   $nid = isset($form_state['complete form']['nid']['#value']) ? $form_state['complete form']['nid']['#value']: NULL;
   $form_id = isset($form_state['complete form']['top_bowler_team_a']['form_id']['#value']) ? $form_state['complete form']['top_bowler_team_a']['form_id']['#value']: NULL;
   $option = isset($form_state['complete form']['top_bowler_team_a']['options']['#value'])? $form_state['complete form']['top_bowler_team_a']['options']['#value']: NULL;
-  $option = implode("",$option);
+  // $option = implode("",$option);
   set_session_and_redirect_user($nid, $form_id, $uid, $option);
 }
 
@@ -1493,14 +1515,14 @@ function betting_form18($form, &$form_state) {
   $user_id = $user->uid;
   $id = 18;
   $markAnswer = get_mark_answer($user_id, $id, $_SESSION['nid']);
-  $default_value = isset($markAnswer) ? $markAnswer : array();
-  if (!empty($default_value)) {
-    $default_value = str_split ( $default_value );
-  }
+  $default_value = isset($markAnswer) ? $markAnswer : NULL;
+  // if (!empty($default_value)) {
+  //   $default_value = str_split ( $default_value );
+  // }
 
 
   $form['top_bowler_team_b']['options'] = array(
-    '#type' => 'checkboxes',
+    '#type' => 'radios',
     '#options' => $active,
     '#required' => TRUE,
     '#default_value' => $default_value,
@@ -1527,7 +1549,7 @@ function save_top_bowler_team_b($form, &$form_state) {
   $form_id = isset($form_state['complete form']['top_bowler_team_b']['form_id']['#value']) ? $form_state['complete form']['top_bowler_team_b']['form_id']['#value']: NULL;
   $option = isset($form_state['complete form']['top_bowler_team_b']['options']['#value'])? $form_state['complete form']['top_bowler_team_b']['options']['#value']: NULL;
   // if (count())
-  $option = implode("",$option);
+  // $option = implode("",$option);
   // dpm($option);
   set_session_and_redirect_user($nid, $form_id, $uid, $option);
 }

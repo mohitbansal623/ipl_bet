@@ -1,9 +1,4 @@
-
 jQuery(document).ready(function(){
-<<<<<<< HEAD
-//    jQuery(".page-betting-form #betting-form div:first-child").not(".form-item").addClass("row");
-   jQuery(".page-pay-online-payment-status header.navbar").addClass("navbar-fixed-top");
-=======
     // jQuery(".page-betting-form #betting-form div:first-child").not(".form-item").addClass("row");
     jQuery(".page-pay-online-payment-status header.navbar").addClass("navbar-fixed-top");
 
@@ -20,10 +15,11 @@ jQuery(document).ready(function(){
 			jQuery('body.front .view-advertisements.view-display-id-block .view-content').slick({
 				infinite: true,
 				slidesToShow: 1,
-				arrows: true,
-        // dots: true,
+  			autoplay: true,
+        autoplaySpeed: 3500,
 				slidesToScroll: 1
 			});
 		}
->>>>>>> 08952c657d9c88478abe77d6745571d66eb0523d
+
+    jQuery('.form-item-max-payu-user-amount #edit-max-payu-user-amount').prop("disabled", true);
 });

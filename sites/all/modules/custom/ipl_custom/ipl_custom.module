@@ -1,8 +1,18 @@
 <?php
 
 function ipl_custom_form_alter(&$form, &$form_state, $form_id) {
-  if ($form_id == 'ipl_matches_node_form') {
-    // dpm($form);
+  if ($form_id == 'confirm_payment_node_form') {
+    global $user;
+    $uid = $user->uid;
+    $data = user_load($uid);
+    $form['field_total_amount']['#access'] = FALSE;
+    $form['field_match_id']['#access'] = FALSE;
+    $form['title']['#access'] = FALSE;
+    $form['title']['#default_value'] = 'confirm-payment-' . $data->name;
+    if (isset($_SESSION['nid']) && isset($_SESSION['amount'])) {
+      $form['field_total_amount']['und'][0]['value']['#default_value'] = $_SESSION['amount'];
+      $form['field_match_id']['und'][0]['value']['#default_value'] = $_SESSION['nid'];
+    }
   }
 }
 
@@ -11,7 +21,7 @@ function ipl_custom_form_alter(&$form, &$form_state, $form_id) {
  * Implements hook_menu().
  */
 function ipl_custom_menu() {
-  $items['payment-form'] = array(
+  $items['payment-form/%'] = array(
     'page callback' => 'payment_gateway',
     'type' => MENU_CALLBACK,
     'access callback' => array('check_access_user'),
@@ -48,9 +58,41 @@ function ipl_custom_menu() {
     'access callback' => array('check_access_user'),
   );
 
+  $items['accept-payment'] = array(
+    'title' => 'Payment confirmed',
+    'page callback' => 'set_status',
+    'page_arguments' => array(1,2,3),
+    'access callback' => array('check_access_user'),
+  );
+
   return $items;
 }
 
+function set_status($nid, $uid, $match_id) {
+  $node = node_load($nid);
+  $node->status = 1;
+  node_save($node);
+
+
+  $query = db_select('node', 'at')
+      ->fields('at', array('nid'));
+  $query-> join ('field_data_field_for_match', 'ma', "ma.entity_id = at.nid");
+  $query->condition('at.uid', $uid);
+  $query->condition('at.type', 'add_to_cart');
+  //$query->condition('at.status', 0);
+  $query->condition('ma.field_for_match_value', $match_id);
+  $results = $query->execute()->fetchCol();
+
+  if (!empty($results)) {
+    foreach($results as $key => $value) {
+      $node = node_load($value);
+      $node->status = 1;
+      node_save($node);
+    }
+  }
+
+  drupal_goto('confirm-payment');
+}
 
 function check_role() {
   global $user;
@@ -233,6 +275,17 @@ function custom_match_configuration($form, &$form_state) {
 }
 
 function payment_gateway() {
+  $amount = arg(1);
+  $renderable_form = array();
+  if (is_numeric($amount) && !empty($amount)) {
+    $_SESSION['amount'] = $amount;
+  }
+  else {
+    drupal_set_message(t("Access denied"), 'warning');
+
+    return $renderable_form;
+  }
+
   $renderable_form = drupal_get_form('payment_form');
 
   return $renderable_form;
@@ -242,7 +295,6 @@ function payment_gateway() {
 function payment_form($form, &$form_state) {
 
   drupal_add_js(drupal_get_path('module', 'ipl_custom') .'/ipl_form.js', 'file');
-  $amount = isset($_SESSION['amount']) ? $_SESSION['amount'] : 0;
   global $user;
   $user_details = user_load($user->uid);
 
@@ -276,7 +328,7 @@ function payment_form($form, &$form_state) {
       '#type' => 'textfield',
       '#title' => t('Amount'),
       '#required' => TRUE,
-      '#default_value' => $amount,
+      '#default_value' => $_SESSION['amount'],
       '#element_validate' => array('element_validate_integer_positive'),
     );
 
@@ -351,6 +403,8 @@ function payment_form_submit($form, &$form_state) {
 
   $amount = $form_state['values']['max_payu_user_amount'];
   $amount = number_format((float)$amount, 2, '.', '');
+
+  drupal_goto('node/add/confirm-payment');
 
   if ($amount <= 1000) {
     $salt = variable_get('max_payu_salt', 'eCwWELxi');
@@ -756,140 +810,294 @@ function get_final_results() {
       $form_name = $value->form_name;
       $form_id = $value->form_id;
       $current_match_id = variable_get('current_match_id', '');
+
       switch ($form_id) {
         case 1:
           $final_ans = variable_get('match_winner', '');
-          $total_amount = get_total_amount($form_id);
           break;
         case 2:
           $final_ans = variable_get('match_toss', '');
-          $total_amount = get_total_amount($form_id);
           break;
         case 3:
           $final_ans = variable_get('match_powerplay_runs', '');
-          $total_amount = get_total_amount($form_id);
           break;
         case 4:
           $final_ans = variable_get('highest_wicket_fall', '');
-          $total_amount = get_total_amount($form_id);
           break;
         case 5:
           $final_ans = variable_get('highest_fours_match', '');
-          $total_amount = get_total_amount($form_id);
           break;
         case 6:
           $final_ans = variable_get('highest_six_match', '');
-          $total_amount = get_total_amount($form_id);
           break;
         case 7:
           $final_ans = variable_get('extra_runs_given', '');
-          $total_amount = get_total_amount($form_id);
           break;
         case 8:
           $final_ans = variable_get('top_batsman_match', '');
-          $total_amount = get_total_amount($form_id);
           break;
         case 9:
           $final_ans = variable_get('top_bowler_match', '');
-          $total_amount = get_total_amount($form_id);
           break;
         case 10:
           $final_ans = variable_get('highest_partnership', '');
-          $total_amount = get_total_amount($form_id);
           break;
         case 11:
           $final_ans = variable_get('highest_catch_without_keeper', '');
-          $total_amount = get_total_amount($form_id);
           break;
         case 12:
           $final_ans = variable_get('highest_dismissal_keeper', '');
-          $total_amount = get_total_amount($form_id);
           break;
         case 13:
           $final_ans = variable_get('player_score_50', '');
-          $total_amount = get_total_amount($form_id);
           break;
         case 14:
           $final_ans = variable_get('highest_poweplay_4s', '');
-          $total_amount = get_total_amount($form_id);
           break;
         case 15:
           $final_ans = variable_get('top_batsman_team_a', '');
-          $total_amount = get_total_amount($form_id);
           break;
         case 16:
           $final_ans = variable_get('top_batsman_team_b', '');
-          $total_amount = get_total_amount($form_id);
           break;
         case 17:
           $final_ans = variable_get('top_bowler_team_a', '');
-          $total_amount = get_total_amount($form_id);
           break;
         case 18:
           $final_ans = variable_get('top_bowler_team_b', '');
-          $total_amount = get_total_amount($form_id);
           break;
         default:
           $final_ans = NULL;
       }
 
-      $results = get_data_for_users_win($form_id, $current_match_id, $final_ans);
-      $total_users_count = count($results);
-      $results['count' . $form_name] = $total_users_count;
-      $results[$form_name] = !empty($results)? $results : NULL;
-    }
+        $final_result[$key] = final_calculation($form_id, $current_match_id, $final_ans, $form_name);
+  //break;
   }
-
-  return $results;
+ }
+  return  $final_result;
 }
 
 
 function get_data_for_users_win($form_id, $current_match_id, $final_ans, $uid = NULL) {
   $query = db_select("betting", "b")
-    -> fields('b', array('uid'))
-    -> fields('m', array('amount', 'paid_by'));
-  $query-> join('max_payu_transaction_details', 'm', "m.match_id = b.nid");
+    -> fields('b', array('uid'));
   $query->condition("b.form_id", $form_id);
   $query->condition('b.select_value', $final_ans);
   $query->condition('b.nid', $current_match_id);
-  $query->condition('m.status', 'failure');
-   if (!empty($uid)) {
+  if (!empty($uid)) {
     $query->condition('b.uid', $uid);
   }
-  $results = $query->execute()->fetchAll();
+  $results = $query->execute()->fetchCol();
 
   return $results;
 }
 
-function get_total_amount($form_id, $uid = NULL) {
+function get_total_amount($form_id = NULL , $match_id = NULL, $uid = NULL) {
   $query = db_select('node', 'n')
-    -> fields('ma', array('field_for_match_value'));
+    -> fields('am', array('field_add_amount_value'));
   $query-> join ('field_data_field_add_amount', 'am', "am.entity_id = n.nid");
   $query-> join ('field_data_field_form_id', 'f', "f.entity_id = n.nid");
   $query-> join ('field_data_field_for_match', 'ma', "ma.entity_id = n.nid");
+  $query->condition('n.status', 1);
+  if (!empty($form_id)) {
   $query->condition('f.field_form_id_value', $form_id);
+  }
+
+  $query->condition('ma.field_for_match_value', $match_id);
   if (!empty($uid)) {
     $query->condition('n.uid', $uid);
   }
   $results = $query->execute()->fetchCol();
-  dpm($results);
-  $match_id = !empty($results) ? $results[0] : NULL;
-  if (!empty($match_id)) {
-    $query = db_select('max_payu_transaction_details', 't')
-              ->fields('t', array('amount'));
-    $query->condition('t.status', 'failure');
-    $query->condition('t.match_id', $match_id);
-    $results = $query->execute()->fetchCol();
-    if (!empty($results)) {
-       $amount = array_sum($results);
-    }
-    else {
-      $amount = 0;
-    }
-  }
-  else {
-    $amount  = 0;
-  }
+  $total_amount = !empty($results) ? array_sum($results): 0;
+  $discount = (10 * $total_amount)/ 100;
+  $total_amount = $total_amount - $discount;
 
   return  $total_amount;
+}
+
+function get_actual_amount($form_id = NULL , $match_id = NULL) {
+  $query = db_select('node', 'n')
+    -> fields('am', array('field_add_amount_value'));
+  $query-> join ('field_data_field_add_amount', 'am', "am.entity_id = n.nid");
+  $query-> join ('field_data_field_form_id', 'f', "f.entity_id = n.nid");
+  $query-> join ('field_data_field_for_match', 'ma', "ma.entity_id = n.nid");
+  $query->condition('n.status', 1);
+  if (!empty($form_id)) {
+  $query->condition('f.field_form_id_value', $form_id);
+  }
+
+  $query->condition('ma.field_for_match_value', $match_id);
+  $results = $query->execute()->fetchCol();
+  $total_amount = !empty($results) ? array_sum($results): 0;
+
+  return  $total_amount;
+}
+
+
+function check_status_payment($nid) {
+  $query = db_select('node', 'at')
+   -> fields('at', array('status'));
+  $query->condition('at.nid', $nid);
+  $query->condition('at.type', 'confirm_payment');
+  $results = $query->execute()->fetchCol();
+  $status = 0;
+
+  if (!empty($results)) {
+    $status = $results[0];
+  }
+
+  return $status;
+}
+
+function get_total_amount_for_match() {
+  $query = db_select('node', 'at')
+    -> fields('am', array('field_total_amount_value'));
+  $query->join('field_data_field_total_amount', 'am', "am.entity_id = at.nid");
+  $query->join('field_data_field_match_id', 'ma', "ma.entity_id = at.nid");
+  $query->condition('field_match_id_value', variable_get('current_match_id', NULL));
+
+  $amount = $query->execute()->fetchCol();
+  $total_amount = !empty($amount) ? array_sum($amount): 0;
+
+  return $total_amount;
+}
+
+
+function final_calculation($form_id, $current_match_id, $final_ans, $form_name) {
+$total = get_total_amount($form_id, $current_match_id);
+$uids = get_data_for_users_win($form_id, $current_match_id, $final_ans);
+$sum = 0;
+$total_amount = array();
+foreach ($uids as $key => $value) {
+$query = db_select('node', 'n')
+    -> fields('am', array('field_add_amount_value'));
+  $query-> join ('field_data_field_add_amount', 'am', "am.entity_id = n.nid");
+  $query-> join ('field_data_field_form_id', 'f', "f.entity_id = n.nid");
+  $query-> join ('field_data_field_for_match', 'ma', "ma.entity_id = n.nid");
+  $query-> condition('n.status', 1);
+  if (!empty($form_id)) {
+  $query->condition('f.field_form_id_value', $form_id);
+  }
+
+  $query->condition('ma.field_for_match_value' , $current_match_id);
+  if (!empty($value)) {
+    $query->condition('n.uid', $value);
+  }
+  $results = $query->execute()->fetchCol();
+  $total_amount[$key]['amount'] = !empty($results) ? array_sum($results): 0;
+  $total_amount[$key]['uid'] = $value;
+
+$sum += $total_amount[$key]['amount'];
+}
+
+//$total = $total / 10;
+$total_user_win = $sum / 10;
+
+if ($total_user_win != 0) {
+$each_user = floor($total / $total_user_win);
+}
+else {
+$each_user = 0;
+}
+
+if (!empty($total_amount)) {
+
+foreach ($total_amount as $key => $value) {
+  $user_win_amount[$key]['win'] = ($value['amount'] * $each_user) / 10;
+  $user_win_amount[$key]['uid'] = $value['uid'];
+}
+}
+
+$get_total_for_this_point = get_total_amount($form_id, $current_match_id, NULL);
+$get_total_for_this_match = get_total_amount(NULL, $current_match_id, NULL);
+$get_total_users_played_point = get_users_who_played_in_match($form_id, $current_match_id);
+$total_users_win = get_count_for_users_win($form_id, $current_match_id, $final_ans);
+$total_users_lost = $get_total_users_played_point - $total_users_win;
+$user_win_amount[$key + 1]['amount_point'] = $get_total_for_this_point;
+$user_win_amount[$key +1 ]['amount_match'] = $get_total_for_this_match;
+$user_win_amount[$key +1 ]['point_name'] = $form_name;
+$user_win_amount[$key +1 ]['total_users_point'] = $get_total_users_played_point;
+$user_win_amount[$key +1 ]['total_users_win'] = $total_users_win;
+$user_win_amount[$key +1 ]['total_users_lost'] = $total_users_lost;
+
+return $user_win_amount;
+}
+
+
+function get_amount_for_specific_point($form_id, $match_id, $uid) {
+  $query = db_select('node', 'n')
+    -> fields('am', array('field_add_amount_value'));
+  $query-> join ('field_data_field_add_amount', 'am', "am.entity_id = n.nid");
+  $query-> join ('field_data_field_form_id', 'f', "f.entity_id = n.nid");
+  $query-> join ('field_data_field_for_match', 'ma', "ma.entity_id = n.nid");
+  $query->condition('f.field_form_id_value', $form_id);
+  $query->condition('ma.field_for_match_value', $match_id);
+  $query->condition('n.status', 1);
+  $query->condition('n.uid', $uid);
+  $results = $query->execute()->fetchCol();
+  $total_amount = !empty($results) ? $results[0]: 0;
+
+  return $total_amount;
+}
+
+
+function get_match_info($nid) {
+  $node = node_load($nid);
+
+  $match = array();
+  $match['title'] = $node->title;
+  $match['team_a'] = $node->field_team_a['und'][0]['value'];
+  $match['team_b'] = $node->field_team_b['und'][0]['value'];
+  $match['date'] = $node->field_match_date['und'][0]['value'];
+  $match['location'] = $node->field_match_location['und'][0]['value'];
+
+  return $match;
+}
+
+function get_users_who_played_in_match($form_id = NULL, $match_id = NULL) {
+  $query = db_select('node', 'n')
+    -> fields('n', array('uid'));
+  $query-> join ('field_data_field_add_amount', 'am', "am.entity_id = n.nid");
+  $query-> join ('field_data_field_form_id', 'f', "f.entity_id = n.nid");
+  $query-> join ('field_data_field_for_match', 'ma', "ma.entity_id = n.nid");
+  if (!empty($form_id)) {
+    $query->condition('f.field_form_id_value', $form_id);
+  }
+  $query->condition('n.status', 1);
+  $query->groupBy('n.uid');
+  $query->condition('ma.field_for_match_value' , $match_id);
+  $results = $query->execute()->rowCount();
+
+  return $results;
+}
+
+function get_count_for_users_win($form_id, $current_match_id, $final_ans) {
+
+  $query = db_select("betting", "b")
+    -> fields('b', array('uid'));
+  $query->condition("b.form_id", $form_id);
+  $query->condition('b.select_value', $final_ans);
+  $query->condition('b.nid', $current_match_id);
+  $query->groupBy('b.uid');
+  $results = $query->execute()->rowCount();
+  $users_uid = $query->execute()->fetchCol();
+  watchdog("usersuid", print_r($users_uid, TRUE));
+  if (!empty($users_uid)) {
+  $query = db_select('node', 'n')
+    -> fields('n', array('uid'));
+  $query-> join ('field_data_field_add_amount', 'am', "am.entity_id = n.nid");
+  $query-> join ('field_data_field_form_id', 'f', "f.entity_id = n.nid");
+  $query-> join ('field_data_field_for_match', 'ma', "ma.entity_id = n.nid");
+  if (!empty($form_id)) {
+    $query->condition('f.field_form_id_value', $form_id);
+  }
+  $query->condition('n.status', 1);
+  $query->condition('n.uid', $users_uid, 'IN');
+  $query->groupBy('n.uid');
+  $query->condition('ma.field_for_match_value' , $current_match_id);
+  $count_users = $query->execute()->rowCount();
+   watchdog("usersuid", print_r($count_users, TRUE));
+   return $count_users;
+ }
+  return $results;
 }

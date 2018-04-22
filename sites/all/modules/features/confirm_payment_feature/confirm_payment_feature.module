@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Confirm Payment Feature feature.
+ */
+
+include_once 'confirm_payment_feature.features.inc';
