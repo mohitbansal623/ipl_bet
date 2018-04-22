@@ -620,3 +620,58 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+.final-results table {
+   width: 100%;
+   margin-bottom: 10px;
+   box-shadow: 0 0 10px #c7c7c76b;
+}
+
+.final-results table tr th, .final-results table tr td {
+   padding: 5px 10px;
+   border: 1px solid #eee;
+}
+
+.final-results {
+   margin-bottom: 80px;
+}
+
+.final-results table tr th {
+   color: darkcyan;
+}
+
+.final-results table.user-data:first-child tr th, .final-results table.user-data:first-child tr td {width: 50%;}
+
+
+.match-amounts {
+   margin-bottom: 50px;
+}
+
+.match-amounts table {
+   width: 100%;
+   margin-bottom: 10px;
+   box-shadow: 0 0 10px #c7c7c76b;
+}
+
+.match-amounts table tr th, .match-amounts table tr td {
+   padding: 5px 10px;
+   border: 1px solid #eee;
+}
+
+.match-amounts table tr th {
+   color: #b10409;
+}
+
+.node-type-page {
+  .field-name-body.field-type-text-with-summary {
+    font-size: 16px;
+    color: darkcyan;
+    padding: 20px;
+    box-shadow: 0 0 10px #c7c7c76b;
+
+    @media screen and (max-width: 767px) {
+      font-size: 14px;
+      padding: 10px;
+    }
+  }
+}
+

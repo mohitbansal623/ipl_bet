@@ -75,19 +75,31 @@ function set_status($nid, $uid, $match_id) {
 
 
   $query = db_select('node', 'at')
-      ->fields('at', array('nid'));
+      ->fields('at', array('nid'))
+      ->fields('f', array('field_form_id_value'));
   $query-> join ('field_data_field_for_match', 'ma', "ma.entity_id = at.nid");
+  $query-> join ('field_data_field_form_id', 'f', "f.entity_id = at.nid");
   $query->condition('at.uid', $uid);
   $query->condition('at.type', 'add_to_cart');
-  //$query->condition('at.status', 0);
+  $query->condition('at.status', 0);
   $query->condition('ma.field_for_match_value', $match_id);
-  $results = $query->execute()->fetchCol();
+  $results = $query->execute()->fetchAll();
 
   if (!empty($results)) {
     foreach($results as $key => $value) {
-      $node = node_load($value);
+      $node = node_load($value->nid);
       $node->status = 1;
       node_save($node);
+
+      $num_updated = db_update('betting')
+      ->fields(array(
+        'status' => 1,
+      ))
+      -> condition('uid', $uid)
+      -> condition('form_id', $value->field_form_id_value)
+      -> condition('nid', $match_id)
+      ->execute();
+
     }
   }
 
@@ -888,6 +900,23 @@ function get_data_for_users_win($form_id, $current_match_id, $final_ans, $uid = 
     $query->condition('b.uid', $uid);
   }
   $results = $query->execute()->fetchCol();
+
+  if (!empty($results)) {
+  $query = db_select('node', 'n')
+    -> fields('n', array('uid'));
+  $query-> join ('field_data_field_add_amount', 'am', "am.entity_id = n.nid");
+  $query-> join ('field_data_field_form_id', 'f', "f.entity_id = n.nid");
+  $query-> join ('field_data_field_for_match', 'ma', "ma.entity_id = n.nid");
+  if (!empty($form_id)) {
+    $query->condition('f.field_form_id_value', $form_id);
+  }
+  $query->condition('n.status', 1);
+  $query->condition('n.uid', $results, 'IN');
+  $query->groupBy('n.uid');
+  $query->condition('ma.field_for_match_value' , $current_match_id);
+  $users = $query->execute()->fetchCol();
+  return $users;
+  }
 
   return $results;
 }

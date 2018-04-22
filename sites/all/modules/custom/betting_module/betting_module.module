@@ -1244,11 +1244,13 @@ function betting_form14($form, &$form_state) {
 
 
 function betting_module_node_delete($node) {
-  db_delete('betting')
-    ->condition('uid', $node->uid)
-    ->condition('nid', $node->field_for_match['und'][0]['value'])
-    ->condition('form_id', $node->field_form_id['und'][0]['value'])
-    ->execute();
+  if ($node->type == 'add_to_cart') {
+    db_delete('betting')
+      ->condition('uid', $node->uid)
+      ->condition('nid', $node->field_for_match['und'][0]['value'])
+      ->condition('form_id', $node->field_form_id['und'][0]['value'])
+      ->execute();
+  }
 }
 
 function betting_form15($form, &$form_state) {
